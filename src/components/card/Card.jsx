@@ -4,7 +4,7 @@ const Card = ({ card }) => {
       <div className="cards__card card">
         <div className="card__group">
           <div className={`card__theme ${card.themeClass}`}>
-            <p className={card.themeClass}>{card.theme}</p>
+            <p className={card.themeClass}>{card.topic}</p>
           </div>
           <a href="#popBrowse" target="_self" rel="noreferrer">
             <div className="card__btn">

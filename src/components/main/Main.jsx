@@ -1,119 +1,57 @@
+import { useEffect, useState } from "react";
+import cardsList from "../../data";
 import Column from "../column/Column";
 
-const cardsWithoutStatus = [
-  {
-    id: 1,
-    theme: "Web Design",
-    themeClass: "_orange",
-    link: "",
-    title: "Название задачи 1",
-    date: "30.10.23",
-  },
-  {
-    id: 2,
-    theme: "Research",
-    themeClass: "_green",
-    link: "",
-    title: "Название задачи 2",
-    date: "30.10.23",
-  },
-  {
-    id: 3,
-    theme: "Web Design",
-    themeClass: "_orange",
-    link: "",
-    title: "Название задачи 3",
-    date: "30.10.23",
-  },
-  {
-    id: 4,
-    theme: "Copywriting",
-    themeClass: "_purple",
-    link: "",
-    title: "Название задачи 4",
-    date: "30.10.23",
-  },
-  {
-    id: 5,
-    theme: "Web Design",
-    themeClass: "_orange",
-    link: "",
-    title: "Название задачи 5",
-    date: "30.10.23",
-  },
-];
-
-const cardsToDo = [
-  {
-    id: 6,
-    theme: "Research",
-    themeClass: "_green",
-    link: "",
-    title: "Название задачи 6",
-    date: "30.10.23",
-  },
-];
-
-const cardsInProgress = [
-  {
-    id: 7,
-    theme: "Research",
-    themeClass: "_green",
-    link: "",
-    title: "Название задачи 7",
-    date: "30.10.23",
-  },
-  {
-    id: 8,
-    theme: "Copywriting",
-    themeClass: "_purple",
-    link: "",
-    title: "Название задачи 8",
-    date: "30.10.23",
-  },
-  {
-    id: 9,
-    theme: "Web Design",
-    themeClass: "_orange",
-    link: "",
-    title: "Название задачи 9",
-    date: "30.10.23",
-  },
-];
-
-const cardsTesting = [
-  {
-    id: 10,
-    theme: "Research",
-    themeClass: "_green",
-    link: "",
-    title: "Название задачи 10",
-    date: "30.10.23",
-  },
-];
-
-const cardsDone = [
-  {
-    id: 11,
-    theme: "Research",
-    themeClass: "_green",
-    link: "",
-    title: "Название задачи 11",
-    date: "30.10.23",
-  },
+const statuses = [
+  "Без статуса",
+  "Нужно сделать",
+  "В работе",
+  "Тестирование",
+  "Готово",
 ];
 
 const Main = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [cards, setCards] = useState([]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCards(cardsList);
+      setIsLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <main
+        className="main"
+        style={{
+          minHeight: "300px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <p style={{ fontSize: "1.5rem", color: "#555" }}>Данные загружаются</p>
+      </main>
+    );
+  }
+
   return (
     <main className="main">
       <div className="container">
         <div className="main__block">
           <div className="main__content">
-            <Column title="Без статуса" cards={cardsWithoutStatus} />
-            <Column title="Нужно сделать" cards={cardsToDo} />
-            <Column title="В работе" cards={cardsInProgress} />
-            <Column title="Тестирование" cards={cardsTesting} />
-            <Column title="Готово" cards={cardsDone} />
+            {statuses.map((status) => {
+              const cardsByStatus = cards.filter(
+                (card) => card.status === status
+              );
+              return (
+                <Column key={status} title={status} cardsList={cardsByStatus} />
+              );
+            })}
           </div>
         </div>
       </div>
