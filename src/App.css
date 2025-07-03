@@ -833,7 +833,9 @@ body {
 
 .cards {
   width: 100%;
-  display: block;
+  display: flex;
+  flex-direction: column;
+
   position: relative;
 }
 .cards__item {
@@ -924,7 +926,7 @@ body {
     padding: 40px 0 64px;
   }
   .main__content {
-    display: block;
+    display: flex;
   }
   .main__column {
     width: 100%;
