@@ -1,24 +1,41 @@
+import {
+  CardsItem,
+  CardsCard,
+  CardGroup,
+  CardTheme,
+  CardThemeText,
+  CardBtn,
+  CardContent,
+  CardTitleLink,
+  CardTitle,
+  CardDate,
+} from "./Card.styled";
+
 const Card = ({ card }) => {
+  // Извлекаем тему, убирая возможный префикс "_"
+  const themeName = card.themeClass?.replace(/^_/, "") || "gray";
+
   return (
-    <div className="cards__item">
-      <div className="cards__card card">
-        <div className="card__group">
-          <div className={`card__theme ${card.themeClass}`}>
-            <p className={card.themeClass}>{card.topic}</p>
-          </div>
+    <CardsItem>
+      <CardsCard>
+        <CardGroup>
+          <CardTheme $themeName={themeName}>
+            <CardThemeText $themeName={themeName}>{card.topic}</CardThemeText>
+          </CardTheme>
           <a href="#popBrowse" target="_self" rel="noreferrer">
-            <div className="card__btn">
+            <CardBtn>
               <div></div>
               <div></div>
               <div></div>
-            </div>
+            </CardBtn>
           </a>
-        </div>
-        <div className="card__content">
-          <a href={card.link} target="_blank" rel="noreferrer">
-            <h3 className="card__title">{card.title}</h3>
-          </a>
-          <div className="card__date">
+        </CardGroup>
+        <CardContent>
+          <CardTitleLink href={card.link} target="_blank" rel="noreferrer">
+            <CardTitle>{card.title}</CardTitle>
+          </CardTitleLink>
+          <CardDate>
+            {/* SVG и дата */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="13"
@@ -48,10 +65,10 @@ const Card = ({ card }) => {
               </defs>
             </svg>
             <p>{card.date}</p>
-          </div>
-        </div>
-      </div>
-    </div>
+          </CardDate>
+        </CardContent>
+      </CardsCard>
+    </CardsItem>
   );
 };
 
