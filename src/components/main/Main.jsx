@@ -2,6 +2,14 @@ import { useEffect, useState } from "react";
 import cardsList from "../../data";
 import Column from "../column/Column";
 
+import {
+  MainWrapper,
+  Container,
+  MainBlock,
+  MainContent,
+  ColumnWrapper,
+} from "./Main.styled";
+
 const statuses = [
   "Без статуса",
   "Нужно сделать",
@@ -18,15 +26,14 @@ const Main = () => {
     const timer = setTimeout(() => {
       setCards(cardsList);
       setIsLoading(false);
-    }, 2000);
+    }, 100);
 
     return () => clearTimeout(timer);
   }, []);
 
   if (isLoading) {
     return (
-      <main
-        className="main"
+      <MainWrapper
         style={{
           minHeight: "300px",
           display: "flex",
@@ -35,27 +42,29 @@ const Main = () => {
         }}
       >
         <p style={{ fontSize: "1.5rem", color: "#555" }}>Данные загружаются</p>
-      </main>
+      </MainWrapper>
     );
   }
 
   return (
-    <main className="main">
-      <div className="container">
-        <div className="main__block">
-          <div className="main__content">
+    <MainWrapper>
+      <Container>
+        <MainBlock>
+          <MainContent>
             {statuses.map((status) => {
               const cardsByStatus = cards.filter(
                 (card) => card.status === status
               );
               return (
-                <Column key={status} title={status} cardsList={cardsByStatus} />
+                <ColumnWrapper key={status}>
+                  <Column title={status} cardsList={cardsByStatus} />
+                </ColumnWrapper>
               );
             })}
-          </div>
-        </div>
-      </div>
-    </main>
+          </MainContent>
+        </MainBlock>
+      </Container>
+    </MainWrapper>
   );
 };
 

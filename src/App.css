@@ -1,4 +1,7 @@
-* {
+/* 
+---GlobalStyles---
+
+ * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -41,15 +44,17 @@ body {
   height: 100%;
   font-family: "Roboto", Arial, Helvetica, sans-serif;
   color: #000000;
-}
+} 
+--------------------------------------------------------------------------  
+*/
 
-.wrapper {
+/* .wrapper {
   max-width: 100%;
   width: 100vw;
   min-height: 100vh;
   overflow: hidden;
-  background-color: #f1f1f1;
-}
+  background-color: #f90202;
+} */
 
 .container {
   max-width: 1260px;
@@ -405,6 +410,9 @@ body {
   line-height: 1;
 }
 
+/*
+--- Calendar ---
+
 .calendar {
   width: 182px;
   margin-bottom: 20px;
@@ -514,7 +522,9 @@ body {
 
 ._current {
   font-weight: 700;
-}
+} 
+-----------------------------------------------------------------------------------------------------------  
+*/
 
 .categories {
   margin-bottom: 20px;
@@ -721,7 +731,9 @@ body {
   display: none;
 }
 
-.header {
+/* --- Header --- */
+
+/* .header {
   width: 100%;
   margin: 0 auto;
   background-color: #ffffff;
@@ -798,9 +810,12 @@ body {
   padding: 34px;
   text-align: center;
   z-index: 2;
-}
+} */
+/* ----------------------------------------------------------------------------------------------- */
 
-.main {
+/* --- Main --- */
+
+/* .main {
   width: 100%;
   background-color: #eaeef6;
 }
@@ -817,9 +832,12 @@ body {
   width: 20%;
   margin: 0 auto;
   display: block;
-}
+} */
+ /* -------------------------------------------------------------------------------------------------- */
 
-.column__title {
+/* --- Column --- */
+
+/* .column__title {
   padding: 0 10px;
   margin: 15px 0;
 }
@@ -829,9 +847,12 @@ body {
   font-weight: 600;
   line-height: 1;
   text-transform: uppercase;
-}
+} */
+/* -------------------------------------------------------------------------------------------------- */
 
-.cards {
+/* --- Card --- */
+
+/* .cards {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -917,7 +938,9 @@ body {
   line-height: 13px;
   color: #94a6be;
   letter-spacing: 0.2px;
-}
+} */
+
+/* ------------------------------------------------------------------------------------------ */
 
 @media screen and (max-width: 1200px) {
   .main__block {
