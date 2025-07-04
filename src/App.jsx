@@ -5,12 +5,13 @@ import Main from "./components/main/Main";
 import PopBrowse from "./components/popups/pop-browse/PopBrowse";
 import PopNewCard from "./components/popups/pop-new-card/PopNewCard";
 import PopUser from "./components/popups/pop-user/PopUser";
+import { Wrapper } from "./components/Shared.styled";
 
 function App() {
   return (
     <>
       <GlobalStyles />
-      <div className="wrapper">
+      <Wrapper>
         {/* pop-up start */}
 
         <PopUser />
@@ -24,9 +25,7 @@ function App() {
         <Header />
 
         <Main />
-      </div>
-
-      <script src="js/script.js"></script>
+      </Wrapper>
     </>
   );
 }
