@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // <-- импортируем
 import {
   HeaderWrapper,
   Container,
@@ -17,10 +18,18 @@ import {
 
 const Header = () => {
   const [isUserPopVisible, setIsUserPopVisible] = useState(false);
+  const navigate = useNavigate(); // <-- инициализируем навигацию
 
   const toggleUserPop = (e) => {
     e.preventDefault();
     setIsUserPopVisible((prev) => !prev);
+  };
+
+  const handleExitClick = (e) => {
+    e.preventDefault();
+    setIsUserPopVisible(false);
+    // Вместо openPopUser вызываем переход по маршруту /exit
+    navigate("/exit");
   };
 
   return (
@@ -41,7 +50,11 @@ const Header = () => {
             <BtnMainNew className="_hover01" id="btnMainNew">
               <a href="#popNewCard">Создать новую задачу</a>
             </BtnMainNew>
-            <HeaderUser href="#user-set-target" className="_hover02" onClick={toggleUserPop}>
+            <HeaderUser
+              href="#user-set-target"
+              className="_hover02"
+              onClick={toggleUserPop}
+            >
               Ivan Ivanov
             </HeaderUser>
             <PopUserSet
@@ -55,8 +68,12 @@ const Header = () => {
                 <p>Темная тема</p>
                 <input type="checkbox" className="checkbox" name="checkbox" />
               </PopUserTheme>
-              <PopUserButton type="button" className="_hover03">
-                <a href="#popExit">Выйти</a>
+              <PopUserButton
+                type="button"
+                className="_hover03"
+                onClick={handleExitClick}
+              >
+                Выйти
               </PopUserButton>
             </PopUserSet>
           </HeaderNav>
