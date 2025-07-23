@@ -5,7 +5,7 @@ const AuthProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
 
   const login = (login, password) => {
-    if (login === "admin" && password === "password") {
+    if (login === "admin" && password === "admin") {
       setIsAuth(true);
       return true;
     }

@@ -1,26 +1,17 @@
-import { useParams } from "react-router-dom";
-import Card from "../components/card/Card";
+import { useParams, useNavigate } from "react-router-dom";
+import PopBrowse from "../components/popups/pop-browse/PopBrowse";
 
 const CardPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
-  // Здесь нужно получить данные карточки по id.
-  // Пока можно заглушку:
-  const cardData = {
-    id,
-    themeClass: "_blue",
-    topic: "Тема карточки",
-    link: "https://example.com",
-    title: "Заголовок карточки",
-    date: "2024-06-01",
+  const handleClose = () => {
+    navigate(-1); // возвращаемся назад по истории
   };
-
-  // В реальном приложении можно сделать запрос к серверу или взять из состояния
 
   return (
     <div>
-      <h2>Карточка с id: {id}</h2>
-      <Card card={cardData} />
+      <PopBrowse id={id} onClose={handleClose} />
     </div>
   );
 };

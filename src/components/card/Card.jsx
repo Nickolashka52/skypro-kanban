@@ -24,7 +24,6 @@ const Card = ({ card }) => {
             <CardThemeText $themeName={themeName}>{card.topic}</CardThemeText>
           </CardTheme>
           <Link to={`/card/${card.id}`}>
-            {" "}
             <CardBtn>
               <div></div>
               <div></div>
