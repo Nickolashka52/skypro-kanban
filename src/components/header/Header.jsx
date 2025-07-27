@@ -1,5 +1,6 @@
+// components/header/Header.jsx
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // <-- импортируем
+import { useNavigate } from "react-router-dom";
 import {
   HeaderWrapper,
   Container,
@@ -18,7 +19,7 @@ import {
 
 const Header = () => {
   const [isUserPopVisible, setIsUserPopVisible] = useState(false);
-  const navigate = useNavigate(); // <-- инициализируем навигацию
+  const navigate = useNavigate();
 
   const toggleUserPop = (e) => {
     e.preventDefault();
@@ -28,8 +29,12 @@ const Header = () => {
   const handleExitClick = (e) => {
     e.preventDefault();
     setIsUserPopVisible(false);
-    // Вместо openPopUser вызываем переход по маршруту /exit
     navigate("/exit");
+  };
+
+  const handleAddTaskClick = (e) => {
+    e.preventDefault();
+    navigate("/add-task"); // Переходим на маршрут /add-task
   };
 
   return (
@@ -47,8 +52,12 @@ const Header = () => {
             </a>
           </LogoDark>
           <HeaderNav>
-            <BtnMainNew className="_hover01" id="btnMainNew">
-              <a href="#popNewCard">Создать новую задачу</a>
+            <BtnMainNew
+              className="_hover01"
+              id="btnMainNew"
+              onClick={handleAddTaskClick} // Добавляем обработчик клика
+            >
+              <a href="#">Создать новую задачу</a> {/* href оставляем для стилизации, но он не используется */}
             </BtnMainNew>
             <HeaderUser
               href="#user-set-target"
