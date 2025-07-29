@@ -1,13 +1,13 @@
 import Calendar from "../../calendar/Calendar";
 
-const PopBrowse = () => {
+const PopBrowse = ({ id, onClose }) => {
   return (
-    <div className="pop-browse" id="popBrowse">
+    <div className="pop-browse" id="">
       <div className="pop-browse__container">
         <div className="pop-browse__block">
           <div className="pop-browse__content">
             <div className="pop-browse__top-block">
-              <h3 className="pop-browse__ttl">Название задачи</h3>
+              <h3 className="pop-browse__ttl">Название задачи #{id}</h3>
               <div className="categories__theme theme-top _orange _active-category">
                 <p className="_orange">Web Design</p>
               </div>
@@ -62,36 +62,30 @@ const PopBrowse = () => {
             </div>
             <div className="pop-browse__btn-browse ">
               <div className="btn-group">
-                <button className="btn-browse__edit _btn-bor _hover03">
-                  <a href="#">Редактировать задачу</a>
-                </button>
-                <button className="btn-browse__delete _btn-bor _hover03">
-                  <a href="#">Удалить задачу</a>
-                </button>
-              </div>
-              <button className="btn-browse__close _btn-bg _hover01">
-                <a href="#">Закрыть</a>
-              </button>
-            </div>
-            <div className="pop-browse__btn-edit _hide">
-              <div className="btn-group">
-                <button className="btn-edit__edit _btn-bg _hover01">
-                  <a href="#">Сохранить</a>
-                </button>
-                <button className="btn-edit__edit _btn-bor _hover03">
-                  <a href="#">Отменить</a>
+                <button
+                  type="button"
+                  className="btn-browse__edit _btn-bor _hover03"
+                  onClick={() => alert("Редактировать задачу")}
+                >
+                  Редактировать задачу
                 </button>
                 <button
-                  className="btn-edit__delete _btn-bor _hover03"
-                  id="btnDelete"
+                  type="button"
+                  className="btn-browse__delete _btn-bor _hover03"
+                  onClick={() => alert("Удалить задачу")}
                 >
-                  <a href="#">Удалить задачу</a>
+                  Удалить задачу
                 </button>
               </div>
-              <button className="btn-edit__close _btn-bg _hover01">
-                <a href="#">Закрыть</a>
+              <button
+                type="button"
+                className="btn-browse__close _btn-bg _hover01"
+                onClick={onClose}
+              >
+                Закрыть
               </button>
             </div>
+            {/* Можно добавить блок редактирования, если нужно */}
           </div>
         </div>
       </div>

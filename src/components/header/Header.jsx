@@ -1,4 +1,6 @@
+// components/header/Header.jsx
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   HeaderWrapper,
   Container,
@@ -17,10 +19,22 @@ import {
 
 const Header = () => {
   const [isUserPopVisible, setIsUserPopVisible] = useState(false);
+  const navigate = useNavigate();
 
   const toggleUserPop = (e) => {
     e.preventDefault();
     setIsUserPopVisible((prev) => !prev);
+  };
+
+  const handleExitClick = (e) => {
+    e.preventDefault();
+    setIsUserPopVisible(false);
+    navigate("/exit");
+  };
+
+  const handleAddTaskClick = (e) => {
+    e.preventDefault();
+    navigate("/add-task"); // Переходим на маршрут /add-task
   };
 
   return (
@@ -38,10 +52,18 @@ const Header = () => {
             </a>
           </LogoDark>
           <HeaderNav>
-            <BtnMainNew className="_hover01" id="btnMainNew">
-              <a href="#popNewCard">Создать новую задачу</a>
+            <BtnMainNew
+              className="_hover01"
+              id="btnMainNew"
+              onClick={handleAddTaskClick} // Добавляем обработчик клика
+            >
+              <a href="#">Создать новую задачу</a> {/* href оставляем для стилизации, но он не используется */}
             </BtnMainNew>
-            <HeaderUser href="#user-set-target" className="_hover02" onClick={toggleUserPop}>
+            <HeaderUser
+              href="#user-set-target"
+              className="_hover02"
+              onClick={toggleUserPop}
+            >
               Ivan Ivanov
             </HeaderUser>
             <PopUserSet
@@ -55,8 +77,12 @@ const Header = () => {
                 <p>Темная тема</p>
                 <input type="checkbox" className="checkbox" name="checkbox" />
               </PopUserTheme>
-              <PopUserButton type="button" className="_hover03">
-                <a href="#popExit">Выйти</a>
+              <PopUserButton
+                type="button"
+                className="_hover03"
+                onClick={handleExitClick}
+              >
+                Выйти
               </PopUserButton>
             </PopUserSet>
           </HeaderNav>

@@ -1,13 +1,23 @@
+// components/popups/pop-new-card/PopNewCard.jsx
 import Calendar from "../../calendar/Calendar";
 
-const PopNewCard = () => {
+const PopNewCard = ({ onClose }) => {
+  const handleCloseClick = (e) => {
+    e.preventDefault();
+    if (onClose) onClose();
+  };
+
   return (
     <div className="pop-new-card" id="popNewCard">
       <div className="pop-new-card__container">
         <div className="pop-new-card__block">
           <div className="pop-new-card__content">
             <h3 className="pop-new-card__ttl">Создание задачи</h3>
-            <a href="#" className="pop-new-card__close">
+            <a
+              href="#"
+              className="pop-new-card__close"
+              onClick={handleCloseClick}
+            >
               &#10006;
             </a>
             <div className="pop-new-card__wrap">
