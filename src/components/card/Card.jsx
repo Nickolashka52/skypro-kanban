@@ -13,8 +13,21 @@ import {
 } from "./Card.styled";
 
 const Card = ({ card }) => {
-  // Извлекаем тему, убирая возможный префикс "_"
-  const themeName = card.themeClass?.replace(/^_/, "") || "gray";
+  // Сопоставление значений topic из API с темами из cardThemes
+  const topicToTheme = {
+    research: "green",
+    "web design": "orange",
+    copywriting: "purple",
+    default: "gray",
+  };
+
+  // Извлекаем тему из API и преобразуем в ключ темы
+  const rawTheme = card.topic?.toLowerCase() || "default";
+
+  const themeName = topicToTheme[rawTheme] || topicToTheme.default;
+
+  // Форматируем дату, если нужно
+  const formattedDate = new Date(card.date).toLocaleDateString(); // Форматирование даты из API
 
   return (
     <CardsItem>
@@ -23,7 +36,9 @@ const Card = ({ card }) => {
           <CardTheme $themeName={themeName}>
             <CardThemeText $themeName={themeName}>{card.topic}</CardThemeText>
           </CardTheme>
-          <Link to={`/card/${card.id}`}>
+          <Link to={`/card/${card._id}`}>
+            {" "}
+            {/* Используем _id из API */}
             <CardBtn>
               <div></div>
               <div></div>
@@ -32,11 +47,10 @@ const Card = ({ card }) => {
           </Link>
         </CardGroup>
         <CardContent>
-          <CardTitleLink href={card.link} target="_blank" rel="noreferrer">
+          <CardTitleLink href="#" target="_blank" rel="noreferrer">
             <CardTitle>{card.title}</CardTitle>
           </CardTitleLink>
           <CardDate>
-            {/* SVG и дата */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="13"
@@ -65,7 +79,7 @@ const Card = ({ card }) => {
                 </clipPath>
               </defs>
             </svg>
-            <p>{card.date}</p>
+            <p>{formattedDate}</p> {/* Используем отформатированную дату */}
           </CardDate>
         </CardContent>
       </CardsCard>
