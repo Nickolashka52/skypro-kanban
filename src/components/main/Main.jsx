@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import cardsList from "../../data";
 import Column from "../column/Column";
+import { getTasks } from "../../services/api";
 
 import {
   MainWrapper,
@@ -21,14 +21,23 @@ const statuses = [
 const Main = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [cards, setCards] = useState([]);
+  const [error, setError] = useState(null); // Добавлено для обработки ошибок
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setCards(cardsList);
-      setIsLoading(false);
-    }, 100);
+    const fetchTasks = async () => {
+      try {
+        setIsLoading(true);
+        const response = await getTasks(); // Загрузка задач с сервера
+        setCards(response.data.tasks); // Установка задач из ответа API
+      } catch (err) {
+        setError("Ошибка загрузки задач. Попробуйте позже.");
+        console.error("Error fetching tasks:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    return () => clearTimeout(timer);
+    fetchTasks();
   }, []);
 
   if (isLoading) {
@@ -42,6 +51,21 @@ const Main = () => {
         }}
       >
         <p style={{ fontSize: "1.5rem", color: "#555" }}>Данные загружаются</p>
+      </MainWrapper>
+    );
+  }
+
+  if (error) {
+    return (
+      <MainWrapper
+        style={{
+          minHeight: "300px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <p style={{ fontSize: "1.5rem", color: "red" }}>{error}</p>
       </MainWrapper>
     );
   }

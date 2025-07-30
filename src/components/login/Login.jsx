@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth"; // поправь путь, если нужно
+import useAuth from "../../hooks/useAuth";
 
 import {
   Wrapper,
@@ -18,16 +18,19 @@ const Login = () => {
   const [loginValue, setLoginValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // Добавлено для состояния загрузки
 
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const success = login(loginValue, passwordValue);
+    setIsLoading(true); // Показываем состояние загрузки
+    setError(null);
+    const success = await login(loginValue, passwordValue); // Асинхронный вызов
+    setIsLoading(false); // Скрываем состояние загрузки
     if (success) {
-      setError(null);
-      navigate("/"); // редирект на главную после успешного входа
+      navigate("/"); // Редирект на главную после успешного входа
     } else {
       setError("Неверный логин или пароль");
     }
@@ -60,8 +63,8 @@ const Login = () => {
                 onChange={(e) => setPasswordValue(e.target.value)}
                 required
               />
-              <ButtonEnter id="btnEnter" type="submit">
-                Войти
+              <ButtonEnter id="btnEnter" type="submit" disabled={isLoading}>
+                {isLoading ? "Загрузка..." : "Войти"}
               </ButtonEnter>
               {error && <p style={{ color: "red" }}>{error}</p>}
               <FormGroup>

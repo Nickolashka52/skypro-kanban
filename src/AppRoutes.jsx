@@ -7,7 +7,7 @@ import CardPage from "./pages/CardPage";
 import AddTask from "./pages/AddTask";
 import Exit from "./pages/Exit";
 import NotFoundPage from "./pages/NotFoundPage";
-import AuthProvider from "./hooks/AuthProvider";
+import { AuthProvider } from "./hooks/AuthProvider";
 import useAuth from "./hooks/useAuth";
 
 const PrivateRoute = ({ children }) => {
