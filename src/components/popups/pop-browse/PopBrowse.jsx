@@ -15,11 +15,11 @@ const PopBrowse = ({ id, onClose }) => {
         setIsLoading(true);
         const response = await getTaskById(id); // Получение задачи по ID
         setTask(response.data.task);
-        setIsLoading(false);
       } catch (err) {
         setError("Ошибка загрузки задачи.");
-        setIsLoading(false);
         console.error("Error fetching task:", err);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchTask();

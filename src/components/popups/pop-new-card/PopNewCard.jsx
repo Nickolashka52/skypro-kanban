@@ -30,12 +30,12 @@ const PopNewCard = ({ onClose }) => {
         date,
       };
       await createTask(taskData); // Создание задачи через API
-      setIsLoading(false);
       navigate("/"); // Перенаправление на главную страницу
     } catch (err) {
       setError("Ошибка создания задачи.");
-      setIsLoading(false);
       console.error("Error creating task:", err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -87,25 +87,32 @@ const PopNewCard = ({ onClose }) => {
                   ></textarea>
                 </div>
               </form>
-              <Calendar onDateChange={setDate} /> {/* Предполагается, что Calendar передаёт дату */}
+              <Calendar onDateChange={setDate} />{" "}
+              {/* Предполагается, что Calendar передаёт дату */}
             </div>
             <div className="pop-new-card__categories categories">
               <p className="categories__p subttl">Категория</p>
               <div className="categories__themes">
                 <div
-                  className={`categories__theme _orange ${topic === "Web Design" ? "_active-category" : ""}`}
+                  className={`categories__theme _orange ${
+                    topic === "Web Design" ? "_active-category" : ""
+                  }`}
                   onClick={() => setTopic("Web Design")}
                 >
                   <p className="_orange">Web Design</p>
                 </div>
                 <div
-                  className={`categories__theme _green ${topic === "Research" ? "_active-category" : ""}`}
+                  className={`categories__theme _green ${
+                    topic === "Research" ? "_active-category" : ""
+                  }`}
                   onClick={() => setTopic("Research")}
                 >
                   <p className="_green">Research</p>
                 </div>
                 <div
-                  className={`categories__theme _purple ${topic === "Copywriting" ? "_active-category" : ""}`}
+                  className={`categories__theme _purple ${
+                    topic === "Copywriting" ? "_active-category" : ""
+                  }`}
                   onClick={() => setTopic("Copywriting")}
                 >
                   <p className="_purple">Copywriting</p>

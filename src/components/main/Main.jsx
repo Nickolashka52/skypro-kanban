@@ -29,11 +29,11 @@ const Main = () => {
         setIsLoading(true);
         const response = await getTasks(); // Загрузка задач с сервера
         setCards(response.data.tasks); // Установка задач из ответа API
-        setIsLoading(false);
       } catch (err) {
         setError("Ошибка загрузки задач. Попробуйте позже.");
-        setIsLoading(false);
         console.error("Error fetching tasks:", err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
