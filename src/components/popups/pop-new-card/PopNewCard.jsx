@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createTask } from "../../../services/api"; // Импорт метода API
+import useTask from "../../../hooks/useTask"; // Импортируем хук
 import Calendar from "../../calendar/Calendar";
 
 const PopNewCard = ({ onClose }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [topic, setTopic] = useState("Web Design"); // Категория по умолчанию
-  const [date, setDate] = useState(new Date().toISOString()); // Дата по умолчанию
+  const [topic, setTopic] = useState("Web Design");
+  const [date, setDate] = useState(new Date().toISOString());
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  // Получаем функцию createTask из контекста
+  const { createTask } = useTask();
 
   const handleCloseClick = (e) => {
     e.preventDefault();
@@ -23,15 +26,19 @@ const PopNewCard = ({ onClose }) => {
     setError(null);
     try {
       const taskData = {
-        title: title || "Новая задача", // Значение по умолчанию, если пустое
+        title: title || "Новая задача",
         description: description || "",
         topic,
-        status: "Без статуса", // Статус по умолчанию
+        status: "Без статуса",
         date,
       };
-      await createTask(taskData); // Создание задачи через API
-      navigate("/"); // Перенаправление на главную страницу
+      // Используем функцию из контекста
+      const success = await createTask(taskData);
+      if (success) {
+        navigate("/"); // Перенаправляем только при успехе
+      }
     } catch (err) {
+      // Обработка ошибок теперь происходит внутри createTask, но можно оставить для надежности
       setError("Ошибка создания задачи.");
       console.error("Error creating task:", err);
     } finally {
@@ -56,7 +63,7 @@ const PopNewCard = ({ onClose }) => {
               <form
                 className="pop-new-card__form form-new"
                 id="formNewCard"
-                onSubmit={handleCreate} // Добавлен обработчик отправки формы
+                onSubmit={handleCreate}
               >
                 <div className="form-new__block">
                   <label htmlFor="formTitle" className="subttl">
@@ -87,8 +94,7 @@ const PopNewCard = ({ onClose }) => {
                   ></textarea>
                 </div>
               </form>
-              <Calendar onDateChange={setDate} />{" "}
-              {/* Предполагается, что Calendar передаёт дату */}
+              <Calendar onDateChange={setDate} />
             </div>
             <div className="pop-new-card__categories categories">
               <p className="categories__p subttl">Категория</p>
