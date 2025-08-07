@@ -1,6 +1,7 @@
+// src/components/popups/pop-browse/PopBrowse.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useTask from "../../../hooks/useTask"; // Импортируем хук
+import useTask from "../../../hooks/useTask"; // Импортируем хук для задач
 import Calendar from "../../calendar/Calendar";
 
 const PopBrowse = ({ id, onClose }) => {
@@ -9,41 +10,48 @@ const PopBrowse = ({ id, onClose }) => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Получаем функции из контекста
-  const { tasks, deleteTask, updateTask } = useTask();
+  // Получаем задачи и функцию удаления из контекста
+  const { tasks, deleteTask: contextDeleteTask } = useTask();
 
-  // Находим задачу по id из общего списка
+  // Находим задачу по id из общего списка задач из контекста
   useEffect(() => {
+    // Ищем задачу в массиве tasks, который приходит из TaskProvider
     const foundTask = tasks.find((t) => t._id === id);
     if (foundTask) {
       setTask(foundTask);
       setIsLoading(false);
-    } else if (!isLoading) {
-      // Если задача не найдена и загрузка закончена
+    } else if (tasks.length > 0) { // Проверяем, что список задач загружен
+      // Если задача не найдена и список задач уже загружен
       setError("Задача не найдена.");
+      setIsLoading(false);
     }
-  }, [id, tasks, isLoading]); // Зависимости: id и tasks
+    // Добавим tasks.length в зависимости, чтобы эффект сработал,
+    // когда список задач будет загружен в первый раз
+  }, [id, tasks, tasks.length]);
 
   // Функция удаления использует контекст
   const handleDelete = async () => {
     try {
-      const success = await deleteTask(id);
+      // Вызываем deleteTask из контекста
+      const success = await contextDeleteTask(id);
       if (success) {
+        // Успешно: контекст обновлен, navigate на главную
         navigate("/");
+      } else {
+         // Ошибка удаления (например, 401, обрабатывается в TaskProvider)
+         // Можно установить локальную ошибку или показать уведомление
+         setError("Не удалось удалить задачу. Попробуйте снова.");
       }
     } catch (err) {
+      // Этот блок может не сработать, если ошибка обработана в TaskProvider
       setError("Ошибка удаления задачи.");
       console.error("Error deleting task:", err);
     }
   };
 
-  // Функция редактирования (пример, можно расширить)
-  const handleEdit = () => {
-    // Здесь можно установить состояние редактирования или перейти на форму редактирования
-    alert("Функция редактирования. ID: " + id);
-  };
-
-  if (isLoading) {
+  // Показываем состояние загрузки, пока список задач из контекста не загрузится
+  // или пока не будет найдена конкретная задача
+  if (isLoading || (tasks.length === 0 && !error)) {
     return <div>Загрузка...</div>;
   }
 
@@ -128,6 +136,7 @@ const PopBrowse = ({ id, onClose }) => {
                   ></textarea>
                 </div>
               </form>
+
               <Calendar />
             </div>
             <div className="theme-down__categories theme-down">
@@ -141,7 +150,7 @@ const PopBrowse = ({ id, onClose }) => {
                 <button
                   type="button"
                   className="btn-browse__edit _btn-bor _hover03"
-                  onClick={handleEdit} // Используем новую функцию
+                  onClick={() => alert("Редактировать задачу")}
                 >
                   Редактировать задачу
                 </button>
