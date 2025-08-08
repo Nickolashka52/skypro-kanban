@@ -1,7 +1,26 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useTask from "../../../hooks/useTask"; // Импортируем хук
+import useTask from "../../../hooks/useTask";
 import Calendar from "../../calendar/Calendar";
+import {
+  PopNewCardStyled,
+  PopNewCardContainer,
+  PopNewCardBlock,
+  PopNewCardContent,
+  PopNewCardTitle,
+  PopNewCardClose,
+  PopNewCardWrap,
+  PopNewCardForm,
+  FormNewBlock,
+  FormNewInput,
+  FormNewArea,
+  FormNewCreate,
+  Subtitle,
+  Categories,
+  CategoriesThemes,
+  CategoriesTheme,
+  ErrorMessage,
+} from "./PopNewCard.styled";
 
 const PopNewCard = ({ onClose }) => {
   const [title, setTitle] = useState("");
@@ -12,7 +31,6 @@ const PopNewCard = ({ onClose }) => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Получаем функцию createTask из контекста
   const { createTask } = useTask();
 
   const handleCloseClick = (e) => {
@@ -32,13 +50,11 @@ const PopNewCard = ({ onClose }) => {
         status: "Без статуса",
         date,
       };
-      // Используем функцию из контекста
       const success = await createTask(taskData);
       if (success) {
-        navigate("/"); // Перенаправляем только при успехе
+        navigate("/");
       }
     } catch (err) {
-      // Обработка ошибок теперь происходит внутри createTask, но можно оставить для надежности
       setError("Ошибка создания задачи.");
       console.error("Error creating task:", err);
     } finally {
@@ -47,30 +63,22 @@ const PopNewCard = ({ onClose }) => {
   };
 
   return (
-    <div className="pop-new-card" id="popNewCard">
-      <div className="pop-new-card__container">
-        <div className="pop-new-card__block">
-          <div className="pop-new-card__content">
-            <h3 className="pop-new-card__ttl">Создание задачи</h3>
-            <a
-              href="#"
-              className="pop-new-card__close"
-              onClick={handleCloseClick}
-            >
+    <PopNewCardStyled id="popNewCard">
+      <PopNewCardContainer>
+        <PopNewCardBlock>
+          <PopNewCardContent>
+            <PopNewCardTitle>Создание задачи</PopNewCardTitle>
+            <PopNewCardClose href="#" onClick={handleCloseClick}>
               &#10006;
-            </a>
-            <div className="pop-new-card__wrap">
-              <form
-                className="pop-new-card__form form-new"
-                id="formNewCard"
-                onSubmit={handleCreate}
-              >
-                <div className="form-new__block">
-                  <label htmlFor="formTitle" className="subttl">
-                    Название задачи
+            </PopNewCardClose>
+
+            <PopNewCardWrap>
+              <PopNewCardForm id="formNewCard" onSubmit={handleCreate}>
+                <FormNewBlock>
+                  <label htmlFor="formTitle">
+                    <Subtitle>Название задачи</Subtitle>
                   </label>
-                  <input
-                    className="form-new__input"
+                  <FormNewInput
                     type="text"
                     name="name"
                     id="formTitle"
@@ -79,65 +87,63 @@ const PopNewCard = ({ onClose }) => {
                     onChange={(e) => setTitle(e.target.value)}
                     autoFocus
                   />
-                </div>
-                <div className="form-new__block">
-                  <label htmlFor="textArea" className="subttl">
-                    Описание задачи
+                </FormNewBlock>
+
+                <FormNewBlock>
+                  <label htmlFor="textArea">
+                    <Subtitle>Описание задачи</Subtitle>
                   </label>
-                  <textarea
-                    className="form-new__area"
+                  <FormNewArea
                     name="text"
                     id="textArea"
                     placeholder="Введите описание задачи..."
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                  ></textarea>
-                </div>
-              </form>
+                  />
+                </FormNewBlock>
+              </PopNewCardForm>
+
               <Calendar onDateChange={setDate} />
-            </div>
-            <div className="pop-new-card__categories categories">
-              <p className="categories__p subttl">Категория</p>
-              <div className="categories__themes">
-                <div
-                  className={`categories__theme _orange ${
-                    topic === "Web Design" ? "_active-category" : ""
-                  }`}
+            </PopNewCardWrap>
+
+            <Categories>
+              <Subtitle>Категория</Subtitle>
+              <CategoriesThemes>
+                <CategoriesTheme
+                  $active={topic === "Web Design"}
                   onClick={() => setTopic("Web Design")}
+                  style={{ background: "#ffe4c2", color: "#ff6d00" }}
                 >
-                  <p className="_orange">Web Design</p>
-                </div>
-                <div
-                  className={`categories__theme _green ${
-                    topic === "Research" ? "_active-category" : ""
-                  }`}
+                  <p style={{ color: "#ff6d00" }}>Web Design</p>
+                </CategoriesTheme>
+
+                <CategoriesTheme
+                  $active={topic === "Research"}
                   onClick={() => setTopic("Research")}
+                  style={{ background: "#b4fdd1", color: "#06b16e" }}
                 >
-                  <p className="_green">Research</p>
-                </div>
-                <div
-                  className={`categories__theme _purple ${
-                    topic === "Copywriting" ? "_active-category" : ""
-                  }`}
+                  <p style={{ color: "#06b16e" }}>Research</p>
+                </CategoriesTheme>
+
+                <CategoriesTheme
+                  $active={topic === "Copywriting"}
                   onClick={() => setTopic("Copywriting")}
+                  style={{ background: "#e9d4ff", color: "#9a48f1" }}
                 >
-                  <p className="_purple">Copywriting</p>
-                </div>
-              </div>
-            </div>
-            {error && <p style={{ color: "red" }}>{error}</p>}
-            <button
-              className="form-new__create _hover01"
-              id="btnCreate"
-              onClick={handleCreate}
-              disabled={isLoading}
-            >
+                  <p style={{ color: "#9a48f1" }}>Copywriting</p>
+                </CategoriesTheme>
+              </CategoriesThemes>
+            </Categories>
+
+            {error && <ErrorMessage>{error}</ErrorMessage>}
+
+            <FormNewCreate onClick={handleCreate} disabled={isLoading}>
               {isLoading ? "Создание..." : "Создать задачу"}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+            </FormNewCreate>
+          </PopNewCardContent>
+        </PopNewCardBlock>
+      </PopNewCardContainer>
+    </PopNewCardStyled>
   );
 };
 

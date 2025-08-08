@@ -1,8 +1,8 @@
-// src/components/popups/pop-browse/PopBrowse.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useTask from "../../../hooks/useTask"; // Импортируем хук для задач
+import useTask from "../../../hooks/useTask";
 import Calendar from "../../calendar/Calendar";
+import * as S from "./PopBrowse.styled";
 
 const PopBrowse = ({ id, onClose }) => {
   const [task, setTask] = useState(null);
@@ -20,7 +20,8 @@ const PopBrowse = ({ id, onClose }) => {
     if (foundTask) {
       setTask(foundTask);
       setIsLoading(false);
-    } else if (tasks.length > 0) { // Проверяем, что список задач загружен
+    } else if (tasks.length > 0) {
+      // Проверяем, что список задач загружен
       // Если задача не найдена и список задач уже загружен
       setError("Задача не найдена.");
       setIsLoading(false);
@@ -38,9 +39,9 @@ const PopBrowse = ({ id, onClose }) => {
         // Успешно: контекст обновлен, navigate на главную
         navigate("/");
       } else {
-         // Ошибка удаления (например, 401, обрабатывается в TaskProvider)
-         // Можно установить локальную ошибку или показать уведомление
-         setError("Не удалось удалить задачу. Попробуйте снова.");
+        // Ошибка удаления (например, 401, обрабатывается в TaskProvider)
+        // Можно установить локальную ошибку или показать уведомление
+        setError("Не удалось удалить задачу. Попробуйте снова.");
       }
     } catch (err) {
       // Этот блок может не сработать, если ошибка обработана в TaskProvider
@@ -64,116 +65,101 @@ const PopBrowse = ({ id, onClose }) => {
   }
 
   return (
-    <div className="pop-browse" id="">
-      <div className="pop-browse__container">
-        <div className="pop-browse__block">
-          <div className="pop-browse__content">
-            <div className="pop-browse__top-block">
-              <h3 className="pop-browse__ttl">
+    <S.PopBrowseWrapper>
+      <S.PopBrowseContainer>
+        <S.PopBrowseBlock>
+          <S.PopBrowseContent>
+            <S.PopBrowseTopBlock>
+              <S.PopBrowseTitle>
                 {task.title} #{task._id}
-              </h3>
-              <div className="categories__theme theme-top _orange _active-category">
+              </S.PopBrowseTitle>
+              <S.CategoriesTheme className="_orange _active-category">
                 <p className="_orange">{task.topic}</p>
-              </div>
-            </div>
-            <div className="pop-browse__status status">
-              <p className="status__p subttl">Статус</p>
-              <div className="status__themes">
-                <div
-                  className={`status__theme ${
-                    task.status === "Без статуса" ? "_gray" : "_hide"
-                  }`}
+              </S.CategoriesTheme>
+            </S.PopBrowseTopBlock>
+
+            <S.StatusWrapper>
+              <S.StatusParagraph className="subttl">Статус</S.StatusParagraph>
+              <S.StatusThemes>
+                <S.StatusTheme
+                  className={task.status === "Без статуса" ? "_gray" : "_hide"}
                 >
                   <p>Без статуса</p>
-                </div>
-                <div
-                  className={`status__theme ${
+                </S.StatusTheme>
+                <S.StatusTheme
+                  className={
                     task.status === "Нужно сделать" ? "_gray" : "_hide"
-                  }`}
+                  }
                 >
-                  <p className="_gray">Нужно сделать</p>
-                </div>
-                <div
-                  className={`status__theme ${
-                    task.status === "В работе" ? "_gray" : "_hide"
-                  }`}
+                  <p>Нужно сделать</p>
+                </S.StatusTheme>
+                <S.StatusTheme
+                  className={task.status === "В работе" ? "_gray" : "_hide"}
                 >
                   <p>В работе</p>
-                </div>
-                <div
-                  className={`status__theme ${
-                    task.status === "Тестирование" ? "_gray" : "_hide"
-                  }`}
+                </S.StatusTheme>
+                <S.StatusTheme
+                  className={task.status === "Тестирование" ? "_gray" : "_hide"}
                 >
                   <p>Тестирование</p>
-                </div>
-                <div
-                  className={`status__theme ${
-                    task.status === "Готово" ? "_gray" : "_hide"
-                  }`}
+                </S.StatusTheme>
+                <S.StatusTheme
+                  className={task.status === "Готово" ? "_gray" : "_hide"}
                 >
                   <p>Готово</p>
-                </div>
-              </div>
-            </div>
-            <div className="pop-browse__wrap">
-              <form
-                className="pop-browse__form form-browse"
-                id="formBrowseCard"
-                action="#"
-              >
-                <div className="form-browse__block">
+                </S.StatusTheme>
+              </S.StatusThemes>
+            </S.StatusWrapper>
+
+            <S.PopBrowseWrap>
+              <S.PopBrowseForm id="formBrowseCard" action="#">
+                <S.FormBrowseBlock>
                   <label htmlFor="textArea01" className="subttl">
                     Описание задачи
                   </label>
-                  <textarea
-                    className="form-browse__area"
+                  <S.FormBrowseArea
                     name="text"
                     id="textArea01"
                     readOnly
                     value={task.description}
                     placeholder="Введите описание задачи..."
-                  ></textarea>
-                </div>
-              </form>
+                  />
+                </S.FormBrowseBlock>
+              </S.PopBrowseForm>
 
               <Calendar />
-            </div>
-            <div className="theme-down__categories theme-down">
-              <p className="categories__p subttl">Категория</p>
-              <div className="categories__theme _orange _active-category">
+            </S.PopBrowseWrap>
+
+            <S.CategoriesWrapper className="theme-down">
+              <S.CategoriesParagraph className="subttl">
+                Категория
+              </S.CategoriesParagraph>
+              <S.CategoriesTheme className="_orange _active-category">
                 <p className="_orange">{task.topic}</p>
-              </div>
-            </div>
-            <div className="pop-browse__btn-browse ">
+              </S.CategoriesTheme>
+            </S.CategoriesWrapper>
+
+            <S.PopBrowseBtnGroup>
               <div className="btn-group">
-                <button
-                  type="button"
-                  className="btn-browse__edit _btn-bor _hover03"
+                <S.ButtonBorder
+                  className="_hover03"
                   onClick={() => alert("Редактировать задачу")}
                 >
                   Редактировать задачу
-                </button>
-                <button
-                  type="button"
-                  className="btn-browse__delete _btn-bor _hover03"
-                  onClick={handleDelete}
-                >
+                </S.ButtonBorder>
+                <S.ButtonBorder className="_hover03" onClick={handleDelete}>
                   Удалить задачу
-                </button>
+                </S.ButtonBorder>
               </div>
-              <button
-                type="button"
-                className="btn-browse__close _btn-bg _hover01"
-                onClick={onClose}
-              >
+              <S.ButtonBackground className="_hover01" onClick={onClose}>
                 Закрыть
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+              </S.ButtonBackground>
+            </S.PopBrowseBtnGroup>
+          </S.PopBrowseContent>
+        </S.PopBrowseBlock>
+      </S.PopBrowseContainer>
+      <S.MobileStyles />
+    </S.PopBrowseWrapper>
   );
 };
 
