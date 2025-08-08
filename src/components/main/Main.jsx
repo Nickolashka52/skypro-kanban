@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
 import Column from "../column/Column";
-import { getTasks } from "../../services/api";
-
+import useTask from "../../hooks/useTask"; // Импортируем хук
 import {
   MainWrapper,
   Container,
@@ -19,26 +17,8 @@ const statuses = [
 ];
 
 const Main = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [cards, setCards] = useState([]);
-  const [error, setError] = useState(null); // Добавлено для обработки ошибок
-
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        setIsLoading(true);
-        const response = await getTasks(); // Загрузка задач с сервера
-        setCards(response.data.tasks); // Установка задач из ответа API
-      } catch (err) {
-        setError("Ошибка загрузки задач. Попробуйте позже.");
-        console.error("Error fetching tasks:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchTasks();
-  }, []);
+  // Получаем состояние и функции из TaskContext
+  const { tasks, isLoading, error } = useTask();
 
   if (isLoading) {
     return (
@@ -76,8 +56,8 @@ const Main = () => {
         <MainBlock>
           <MainContent>
             {statuses.map((status) => {
-              const cardsByStatus = cards.filter(
-                (card) => card.status === status
+              const cardsByStatus = tasks.filter(
+                (card) => card && card.status === status
               );
               return (
                 <ColumnWrapper key={status}>
