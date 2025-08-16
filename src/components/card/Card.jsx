@@ -13,7 +13,6 @@ import {
 } from "./Card.styled";
 
 const Card = ({ card }) => {
-  // Сопоставление значений topic из API с темами из cardThemes
   const topicToTheme = {
     research: "green",
     "web design": "orange",
@@ -21,13 +20,11 @@ const Card = ({ card }) => {
     default: "gray",
   };
 
-  // Извлекаем тему из API и преобразуем в ключ темы
   const rawTheme = card.topic?.toLowerCase() || "default";
 
   const themeName = topicToTheme[rawTheme] || topicToTheme.default;
 
-  // Форматируем дату, если нужно
-  const formattedDate = new Date(card.date).toLocaleDateString(); // Форматирование даты из API
+  const formattedDate = new Date(card.date).toLocaleDateString();
 
   return (
     <CardsItem>
@@ -38,7 +35,6 @@ const Card = ({ card }) => {
           </CardTheme>
           <Link to={`/card/${card._id}`}>
             {" "}
-            {/* Используем _id из API */}
             <CardBtn>
               <div></div>
               <div></div>
@@ -79,7 +75,7 @@ const Card = ({ card }) => {
                 </clipPath>
               </defs>
             </svg>
-            <p>{formattedDate}</p> {/* Используем отформатированную дату */}
+            <p>{formattedDate}</p>
           </CardDate>
         </CardContent>
       </CardsCard>

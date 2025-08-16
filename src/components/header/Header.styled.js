@@ -32,7 +32,6 @@ export const HeaderBlock = styled.div`
 export const LogoLight = styled.div`
   &.header__logo {
     &._show._light {
-      /* если нужны стили для видимости, можно добавить */
     }
   }
 
@@ -49,7 +48,6 @@ export const LogoLight = styled.div`
 export const LogoDark = styled.div`
   &.header__logo {
     &._dark {
-      /* если нужны стили для темного лого */
     }
   }
 
@@ -169,7 +167,6 @@ export const PopUserSet = styled.div`
   text-align: center;
   z-index: 2;
 
-  /* Чтобы отображать через inline стиль из компонента */
   &.visible {
     display: block;
   }

@@ -4,8 +4,8 @@ export const MainColumn = styled.div`
   width: 100%;
   margin: 0;
   display: block;
+  overflow: hidden; 
 
-  /* Адаптив */
   @media screen and (max-width: 1200px) {
     width: 100%;
     margin: 0 auto;
@@ -32,8 +32,9 @@ export const Cards = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
+  overflow: hidden; 
 
   @media screen and (max-width: 1200px) {
-    overflow-y: auto;
+    overflow-y: hidden; 
   }
 `;

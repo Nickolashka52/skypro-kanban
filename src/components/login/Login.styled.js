@@ -136,7 +136,6 @@ export const FormGroup = styled.div`
   }
 `;
 
-// Если хотите стилизовать Link отдельно, можно экспортировать так:
 export const StyledLink = styled(Link)`
   text-decoration: underline;
   color: rgba(148, 166, 190, 0.4);

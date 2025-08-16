@@ -1,28 +1,30 @@
 import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
-* {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-}
-  *:before,
-  *:after {
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
   }
+
   a,
   a:visited {
     text-decoration: none;
-    cursor: pointer;
   }
+
   button,
-  ._btn {
+  ._btn { 
     cursor: pointer;
     outline: none;
   }
-  ul li {
+
+  ul,
+  ol {
     list-style: none;
   }
+
   @keyframes card-animation {
     0% {
       height: 0;
@@ -33,11 +35,28 @@ box-sizing: border-box;
       opacity: 1;
     }
   }
+
   html,
   body {
     width: 100%;
     height: 100%;
-    font-family: "Roboto", Arial, Helvetica, sans-serif;
+    font-family: "Roboto", Arial, Helvetica, sans-serif; 
     color: #000000;
+    background-color: #e5e5e5; 
+  }
+
+ 
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
   }
 `;

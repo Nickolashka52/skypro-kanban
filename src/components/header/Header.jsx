@@ -1,4 +1,3 @@
-// components/header/Header.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -34,7 +33,7 @@ const Header = () => {
 
   const handleAddTaskClick = (e) => {
     e.preventDefault();
-    navigate("/add-task"); // Переходим на маршрут /add-task
+    navigate("/add-task");
   };
 
   return (
@@ -55,9 +54,9 @@ const Header = () => {
             <BtnMainNew
               className="_hover01"
               id="btnMainNew"
-              onClick={handleAddTaskClick} // Добавляем обработчик клика
+              onClick={handleAddTaskClick}
             >
-              <a href="#">Создать новую задачу</a> {/* href оставляем для стилизации, но он не используется */}
+              <a href="#">Создать новую задачу</a>
             </BtnMainNew>
             <HeaderUser
               href="#user-set-target"

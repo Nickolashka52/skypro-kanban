@@ -9,16 +9,14 @@ const CardPage = () => {
   const navigate = useNavigate();
 
   const handleClose = () => {
-    navigate(-1); // возвращаемся назад по истории
+    navigate(-1);
   };
 
   return (
     <Wrapper>
       <Header />
       <Main />
-      <div>
-        <PopBrowse id={id} onClose={handleClose} />
-      </div>
+      <PopBrowse id={id} onClose={handleClose} />
     </Wrapper>
   );
 };

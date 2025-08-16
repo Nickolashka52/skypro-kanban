@@ -15,47 +15,28 @@ export const TaskProvider = ({ children }) => {
   const { isAuth } = useAuth();
 
   const fetchTasks = useCallback(async () => {
+    if (!isAuth) return;
+
     setIsLoading(true);
     setError(null);
     try {
       const response = await apiGetTasks();
-      if (response.data && Array.isArray(response.data.tasks)) {
-        setTasks(response.data.tasks);
-      } else {
-        console.warn(
-          "API вернул некорректные данные для задач:",
-          response.data
-        );
-        setTasks([]);
-      }
+      setTasks(response.data?.tasks || response.tasks || []);
     } catch (err) {
-      if (err.response && err.response.status === 401) {
-        console.log(
-          "Запрос задач вернул 401, пользователь будет перенаправлен."
-        );
-        setTasks([]);
-      } else {
-        setError("Ошибка загрузки задач. Попробуйте позже.");
-        console.error("Error fetching tasks:", err);
-        setTasks([]);
-      }
+      setError(err.response?.data?.message || "Ошибка загрузки задач");
+      setTasks([]);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [isAuth]);
 
   useEffect(() => {
-    if (!isAuth) {
-      setTasks([]); // Очищаем задачи при выходе
-      return;
-    }
     fetchTasks();
-  }, [isAuth, fetchTasks]);
+  }, [fetchTasks]);
 
-  // Функция для создания новой задачи
   const createTask = async (taskData) => {
     if (!isAuth) {
-      setError("Невозможно создать задачу: пользователь не авторизован.");
+      setError("Требуется авторизация");
       return false;
     }
 
@@ -63,78 +44,67 @@ export const TaskProvider = ({ children }) => {
     setError(null);
     try {
       const response = await apiCreateTask(taskData);
-      if (response.status === 201) {
-        await fetchTasks();
-        return true;
-      } else {
-        console.warn(
-          "API createTask вернул неожиданный статус:",
-          response.status,
-          response.data
-        );
-        setError("Сервер вернул неожиданный ответ при создании задачи.");
-        return false;
-      }
+      const newTask = response.data?.task || response.task;
+
+      setTasks((prev) => [...prev, newTask]);
+
+      return true;
     } catch (err) {
-      if (err.response && err.response.status === 401) {
-        console.log("Создание задачи вернуло 401.");
-        return false;
-      } else {
-        setError("Ошибка создания задачи.");
-        console.error("Error creating task:", err);
-        return false;
-      }
+      setError(err.response?.data?.message || "Ошибка создания задачи");
+      return false;
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Функция для обновления задачи
-  const updateTask = async (id, taskData) => {
+  const updateTask = async (
+    id,
+    taskData,
+    { temporary = false, optimisticUpdate = true, rollbackOnError = true } = {}
+  ) => {
     if (!isAuth) {
-      setError("Невозможно обновить задачу: пользователь не авторизован.");
+      setError("Требуется авторизация");
       return false;
     }
 
+    let previousTask = null;
+    if (optimisticUpdate) {
+      previousTask = tasks.find((t) => t._id === id);
+      setTasks((prev) =>
+        prev.map((task) => (task._id === id ? { ...task, ...taskData } : task))
+      );
+    }
+
+    if (temporary) return true;
+
     setIsLoading(true);
-    setError(null);
     try {
       const response = await apiUpdateTask(id, taskData);
-      if (
-        response.data &&
-        typeof response.data === "object" &&
-        response.data._id
-      ) {
-        setTasks((prevTasks) =>
-          prevTasks.map((task) => (task._id === id ? response.data : task))
+      const updatedTask = response.data?.task || response.task;
+
+      if (updatedTask) {
+        setTasks((prev) =>
+          prev.map((task) => (task._id === id ? updatedTask : task))
         );
-        return true;
-      } else {
-        console.warn(
-          "API updateTask вернул неожиданную структуру данных:",
-          response.data
-        );
-        setError("Сервер вернул некорректный ответ при обновлении задачи.");
-        return false;
       }
+      return true;
     } catch (err) {
-      if (err.response && err.response.status === 401) {
-        console.log("Обновление задачи вернуло 401.");
-        return false;
-      } else {
-        setError("Ошибка обновления задачи.");
-        console.error("Error updating task:", err);
-        return false;
+      setError(err.response?.data?.message || "Ошибка обновления задачи");
+
+      if (optimisticUpdate && rollbackOnError && previousTask) {
+        setTasks((prev) =>
+          prev.map((task) => (task._id === id ? previousTask : task))
+        );
       }
+      return false;
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Функция для удаления задачи
   const deleteTask = async (id) => {
     if (!isAuth) {
-      setError("Невозможно удалить задачу: пользователь не авторизован.");
+      setError("Требуется авторизация");
       return false;
     }
 
@@ -142,31 +112,29 @@ export const TaskProvider = ({ children }) => {
     setError(null);
     try {
       await apiDeleteTask(id);
-      setTasks((prevTasks) => prevTasks.filter((task) => task._id !== id));
+      setTasks((prev) => prev.filter((task) => task._id !== id));
       return true;
     } catch (err) {
-      if (err.response && err.response.status === 401) {
-        console.log("Удаление задачи вернуло 401.");
-        return false;
-      } else {
-        setError("Ошибка удаления задачи.");
-        console.error("Error deleting task:", err);
-        return false;
-      }
+      setError(err.response?.data?.message || "Ошибка удаления задачи");
+      return false;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const value = {
-    tasks,
-    isLoading,
-    error,
-    fetchTasks,
-    createTask,
-    updateTask,
-    deleteTask,
-  };
-
-  return <TaskContext.Provider value={value}>{children}</TaskContext.Provider>;
+  return (
+    <TaskContext.Provider
+      value={{
+        tasks,
+        isLoading,
+        error,
+        fetchTasks,
+        createTask,
+        updateTask,
+        deleteTask,
+      }}
+    >
+      {children}
+    </TaskContext.Provider>
+  );
 };

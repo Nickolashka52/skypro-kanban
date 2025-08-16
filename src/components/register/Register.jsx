@@ -15,11 +15,11 @@ import {
 } from "./Register.styled";
 
 const Register = () => {
-  const [name, setName] = useState(""); // Добавлено состояние для имени
-  const [loginValue, setLoginValue] = useState(""); // Логин
-  const [passwordValue, setPasswordValue] = useState(""); // Пароль
-  const [error, setError] = useState(null); // Ошибка
-  const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
+  const [name, setName] = useState("");
+  const [loginValue, setLoginValue] = useState("");
+  const [passwordValue, setPasswordValue] = useState("");
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { register } = useAuth();
 
@@ -27,7 +27,7 @@ const Register = () => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
-    const success = await register(name, loginValue, passwordValue); // Вызов функции регистрации
+    const success = await register(name, loginValue, passwordValue);
     setIsLoading(false);
     if (!success) {
       setError(

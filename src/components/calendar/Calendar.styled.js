@@ -14,7 +14,7 @@ export const CalendarTitle = styled.h2`
   margin-bottom: 14px;
   padding: 0 7px;
   font-weight: 600;
-  font-size: 20px;
+  font-size: 14px;
   line-height: 24px;
   color: #000;
 `;

@@ -1,11 +1,13 @@
 import Column from "../column/Column";
-import useTask from "../../hooks/useTask"; // Импортируем хук
+import useTask from "../../hooks/useTask"; 
 import {
   MainWrapper,
   Container,
   MainBlock,
   MainContent,
   ColumnWrapper,
+  LoadingContainer,
+  Loader,
 } from "./Main.styled";
 
 const statuses = [
@@ -17,20 +19,14 @@ const statuses = [
 ];
 
 const Main = () => {
-  // Получаем состояние и функции из TaskContext
   const { tasks, isLoading, error } = useTask();
 
   if (isLoading) {
     return (
-      <MainWrapper
-        style={{
-          minHeight: "300px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <p style={{ fontSize: "1.5rem", color: "#555" }}>Данные загружаются</p>
+      <MainWrapper>
+        <LoadingContainer>
+          <Loader>Загрузка...</Loader>
+        </LoadingContainer>
       </MainWrapper>
     );
   }
@@ -46,6 +42,14 @@ const Main = () => {
         }}
       >
         <p style={{ fontSize: "1.5rem", color: "red" }}>{error}</p>
+      </MainWrapper>
+    );
+  }
+
+  if (!isLoading && tasks.length === 0) {
+    return (
+      <MainWrapper>
+        <p>Новых задач нет</p>
       </MainWrapper>
     );
   }

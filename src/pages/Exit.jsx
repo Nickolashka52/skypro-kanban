@@ -8,9 +8,7 @@ const Exit = () => {
   const navigate = useNavigate();
 
   const handleClose = () => {
-    // При закрытии модалки возвращаемся на главную или предыдущую страницу
-    navigate(-1); // назад в истории
-    // или navigate('/') если хотите всегда на главную
+    navigate(-1);
   };
 
   return (

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import useTask from "../../../hooks/useTask";
 import Calendar from "../../calendar/Calendar";
 import {
@@ -19,7 +18,6 @@ import {
   Categories,
   CategoriesThemes,
   CategoriesTheme,
-  ErrorMessage,
 } from "./PopNewCard.styled";
 
 const PopNewCard = ({ onClose }) => {
@@ -29,7 +27,6 @@ const PopNewCard = ({ onClose }) => {
   const [date, setDate] = useState(new Date().toISOString());
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
 
   const { createTask } = useTask();
 
@@ -40,8 +37,12 @@ const PopNewCard = ({ onClose }) => {
 
   const handleCreate = async (e) => {
     e.preventDefault();
+    if (!title.trim() || !description.trim()) {
+      setError("Название и описание задачи не могут быть пустыми");
+      return;
+    }
     setIsLoading(true);
-    setError(null);
+    setError(null); 
     try {
       const taskData = {
         title: title || "Новая задача",
@@ -52,7 +53,7 @@ const PopNewCard = ({ onClose }) => {
       };
       const success = await createTask(taskData);
       if (success) {
-        navigate("/");
+        if (onClose) onClose(); 
       }
     } catch (err) {
       setError("Ошибка создания задачи.");
@@ -135,7 +136,17 @@ const PopNewCard = ({ onClose }) => {
               </CategoriesThemes>
             </Categories>
 
-            {error && <ErrorMessage>{error}</ErrorMessage>}
+            {error && (
+              <div style={{ 
+                color: "red", 
+                padding: "10px", 
+                margin: "10px 0",
+                textAlign: "center",
+                fontWeight: "bold"
+              }}>
+                {error}
+              </div>
+            )}
 
             <FormNewCreate onClick={handleCreate} disabled={isLoading}>
               {isLoading ? "Создание..." : "Создать задачу"}

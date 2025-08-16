@@ -6,11 +6,11 @@ export const PopExit = styled.div`
   height: 100%;
   min-width: 320px;
   min-height: 100vh;
-  position: fixed; /* рекомендую fixed */
+  position: fixed; 
   top: 0;
   left: 0;
   z-index: 1000;
-  background: rgba(0, 0, 0, 0.4); /* затемнение фона */
+  background: rgba(0, 0, 0, 0.4); 
   align-items: center;
   justify-content: center;
 `;

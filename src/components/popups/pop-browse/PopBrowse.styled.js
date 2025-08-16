@@ -1,56 +1,35 @@
 import styled from "styled-components";
 
 export const PopBrowseWrapper = styled.div`
-  display: flex;
-  width: 100%;
-  height: 100%;
-  min-width: 375px;
-  min-height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9;
 `;
 
 export const PopBrowseContainer = styled.div`
   width: 100%;
-  height: 100%;
-  min-height: 100vh;
+  max-width: 630px;
   padding: 0 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.4);
 `;
 
 export const PopBrowseBlock = styled.div`
-  display: block;
-  margin: 0 auto;
-  background-color: #ffffff;
-  max-width: 630px;
-  width: 100%;
-  padding: 40px 30px 38px;
+  background: #fff;
   border-radius: 10px;
   border: 0.7px solid #d4dbe5;
+  padding: 40px 30px 38px;
   position: relative;
 `;
 
 export const PopBrowseContent = styled.div`
-  display: block;
-  text-align: left;
-
   .categories__theme {
     opacity: 1;
-  }
-
-  .theme-down {
-    display: none;
-    margin-bottom: 20px;
-  }
-
-  .theme-top {
-    display: block;
   }
 `;
 
@@ -72,39 +51,31 @@ export const PopBrowseWrap = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  margin-bottom: 20px;
+  width: 100%;
+  overflow: hidden;
 `;
 
 export const PopBrowseForm = styled.form`
   max-width: 370px;
   width: 100%;
   display: block;
-  margin-bottom: 20px;
 `;
 
-export const PopBrowseBtnGroup = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-
-  button {
-    height: 30px;
-    margin-bottom: 10px;
-    padding: 0 14px;
-  }
-
-  .btn-group {
-    display: flex;
-    gap: 8px;
-  }
-`;
-
-export const FormBrowseBlock = styled.div`
+export const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-export const FormBrowseArea = styled.textarea`
+export const Subtitle = styled.p`
+  color: #000;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  margin-bottom: 14px;
+`;
+
+export const Textarea = styled.textarea`
   max-width: 370px;
   width: 100%;
   outline: none;
@@ -115,8 +86,12 @@ export const FormBrowseArea = styled.textarea`
   font-size: 14px;
   line-height: 1;
   letter-spacing: -0.14px;
-  margin-top: 14px;
   height: 200px;
+  resize: none;
+
+  &:read-only {
+    cursor: default;
+  }
 
   &::placeholder {
     font-weight: 400;
@@ -127,102 +102,23 @@ export const FormBrowseArea = styled.textarea`
   }
 `;
 
-export const StatusWrapper = styled.div`
+export const StatusBlock = styled.div`
   margin-bottom: 11px;
 `;
 
-export const StatusParagraph = styled.p`
-  margin-bottom: 14px;
-  color: #000;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1;
-`;
-
-export const StatusThemes = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: flex-start;
-`;
-
-export const StatusTheme = styled.div`
+export const StatusItem = styled.div`
+  display: inline-block;
   border-radius: 24px;
   border: 0.7px solid rgba(148, 166, 190, 0.4);
-  color: #94a6be;
+  background: #94a6be;
+  color: #ffffff;
   padding: 11px 14px 10px;
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: -0.14px;
   margin-right: 7px;
   margin-bottom: 7px;
-
-  p {
-    font-size: 14px;
-    line-height: 1;
-    letter-spacing: -0.14px;
-  }
-
-  &._gray {
-    background: #94a6be;
-    color: #ffffff;
-  }
-
-  &._hide {
-    display: none;
-  }
-`;
-
-export const ButtonBorder = styled.button`
-  border-radius: 4px;
-  border: 0.7px solid var(--palette-navy-60, #565eef);
-  outline: none;
-  background: transparent;
-  color: #565eef;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #33399b;
-    color: #ffffff;
-  }
-
-  &._hover03:hover {
-    background-color: #33399b;
-    color: #ffffff;
-  }
-`;
-
-export const ButtonBackground = styled.button`
-  border-radius: 4px;
-  background: #565eef;
-  border: none;
-  outline: none;
-  color: #ffffff;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #33399b;
-  }
-
-  &._hover01:hover {
-    background-color: #33399b;
-  }
-`;
-
-export const CategoriesWrapper = styled.div`
-  margin-bottom: 20px;
-`;
-
-export const CategoriesThemes = styled.div`
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: flex-start;
-  justify-content: flex-start;
-`;
-
-export const CategoriesParagraph = styled.p`
-  margin-bottom: 14px;
-  color: #000;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1;
+  white-space: nowrap;
 `;
 
 export const CategoriesTheme = styled.div`
@@ -232,88 +128,198 @@ export const CategoriesTheme = styled.div`
   padding: 8px 20px;
   border-radius: 24px;
   margin-right: 7px;
-  opacity: 0.4;
+  background-color: ${({ $bg }) => $bg || "#ffe4c2"};
+  color: ${({ $color }) => $color || "#ff6d00"};
+  opacity: ${({ $active }) => ($active ? "1" : "0.4")};
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 14px;
+  white-space: nowrap;
+`;
 
-  p {
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 14px;
-    white-space: nowrap;
-  }
+export const PopBrowseBtnBrowse = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;
 
-  &._orange {
-    background-color: #ffe4c2;
-    color: #ff6d00;
-  }
+export const BtnGroup = styled.div`
+  display: flex;
+  gap: 8px;
+`;
 
-  &._active-category {
-    opacity: 1 !important;
+export const BtnEdit = styled.button`
+  height: 30px;
+  padding: 0 14px;
+  border-radius: 4px;
+  border: 0.7px solid var(--palette-navy-60, #565eef);
+  outline: none;
+  background: transparent;
+  color: #565eef;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #33399b;
+    color: #ffffff;
   }
 `;
 
-// Медиа-запросы для мобильной версии
+export const BtnDelete = styled.button`
+  height: 30px;
+  padding: 0 14px;
+  border-radius: 4px;
+  border: 0.7px solid var(--palette-navy-60, #565eef);
+  outline: none;
+  background: transparent;
+  color: #565eef;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #33399b; // Изменено с #ff0000
+    color: #ffffff;
+    border-color: #33399b; // Изменено с #ff0000
+  }
+`;
+
+export const BtnClose = styled.button`
+  height: 30px;
+  padding: 0 14px;
+  border-radius: 4px;
+  background: #565eef;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #33399b;
+  }
+`;
+
+// Медиа-запросы для мобильных устройств
 export const MobileStyles = styled.div`
-  @media screen and (max-width: 660px) {
+  @media (max-width: 660px) {
     ${PopBrowseWrapper} {
       top: 70px;
     }
 
     ${PopBrowseContainer} {
       padding: 0;
-      justify-content: flex-start;
     }
 
     ${PopBrowseBlock} {
       border-radius: 0;
-    }
-
-    ${PopBrowseWrap} {
-      display: block;
-    }
-  }
-
-  @media screen and (max-width: 495px) {
-    ${PopBrowseBlock} {
       padding: 20px 16px 32px;
     }
 
-    ${PopBrowseContent} {
-      .theme-down {
-        display: block;
-        margin-bottom: 20px;
-      }
-
-      .theme-top {
-        display: none;
-      }
-    }
-
-    ${PopBrowseForm} {
-      max-width: 100%;
-    }
-
-    ${PopBrowseBtnGroup} {
+    ${PopBrowseWrap} {
       flex-direction: column;
-      
-      button {
-        width: 100%;
-        height: 40px;
-      }
-
-      .btn-group {
-        width: 100%;
-        margin-bottom: 10px;
-        
-        button {
-          margin-right: 0;
-          flex: 1;
-        }
-      }
     }
 
-    ${FormBrowseArea} {
-      max-width: 100%;
+    ${Textarea} {
       height: 37px;
+      max-width: 100%;
     }
+
+    ${PopBrowseBtnBrowse} {
+      flex-direction: column;
+    }
+
+    ${BtnGroup} {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    ${BtnEdit}, ${BtnDelete}, ${BtnClose} {
+      width: 100%;
+      height: 40px;
+    }
+  }
+`;
+
+export const Input = styled.input`
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  font-weight: 600;
+  color: #000;
+  outline: none;
+`;
+
+export const StatusList = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: hidden; // Убираем скролл полностью
+  gap: 4px;
+  width: 100%;
+  padding-bottom: 2px;
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+`;
+
+export const StatusItemEdit = styled.div`
+  display: inline-flex;
+  border-radius: 24px;
+  border: 0.7px solid rgba(148, 166, 190, 0.4);
+  background: ${({ $active }) => ($active ? "#94A6BE" : "#FFFFFF")};
+  color: ${({ $active }) => ($active ? "#FFFFFF" : "#94A6BE")};
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: -0.14px;
+  margin-right: 0;
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0; // Запрещаем сжатие элементов
+  transition: background-color 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    background: ${({ $active }) => ($active ? "#94A6BE" : "#EAEEF6")};
+  }
+`;
+
+export const BtnSave = styled.button`
+  height: 30px;
+  padding: 0 14px;
+  border-radius: 4px;
+  background: #565eef;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #33399b;
+  }
+`;
+
+export const BtnCancel = styled.button`
+  height: 30px;
+  padding: 0 14px;
+  border-radius: 4px;
+  border: 0.7px solid var(--palette-navy-60, #565eef);
+  outline: none;
+  background: transparent;
+  color: #565eef;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #33399b;
+    color: #ffffff;
   }
 `;
