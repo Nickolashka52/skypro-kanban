@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import {
   CardsItem,
@@ -12,19 +13,20 @@ import {
   CardDate,
 } from "./Card.styled";
 
-const Card = ({ card }) => {
+const Card = React.memo(({ card }) => {
   const topicToTheme = {
     research: "green",
     "web design": "orange",
     copywriting: "purple",
     default: "gray",
   };
-
   const rawTheme = card.topic?.toLowerCase() || "default";
-
   const themeName = topicToTheme[rawTheme] || topicToTheme.default;
-
   const formattedDate = new Date(card.date).toLocaleDateString();
+
+  const handleClick = () => {
+    document.body.classList.add("modal-open");
+  };
 
   return (
     <CardsItem>
@@ -33,7 +35,7 @@ const Card = ({ card }) => {
           <CardTheme $themeName={themeName}>
             <CardThemeText $themeName={themeName}>{card.topic}</CardThemeText>
           </CardTheme>
-          <Link to={`/card/${card._id}`}>
+          <Link to={`/card/${card._id}`} onClick={handleClick}>
             {" "}
             <CardBtn>
               <div></div>
@@ -81,6 +83,6 @@ const Card = ({ card }) => {
       </CardsCard>
     </CardsItem>
   );
-};
+});
 
 export default Card;

@@ -6,15 +6,25 @@ import AuthContext from "./AuthContext";
 export const AuthProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true); 
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
     if (token && storedUser) {
-      setIsAuth(true);
-      setUser(JSON.parse(storedUser));
+      try {
+        setIsAuth(true);
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        console.error("Error parsing user data from localStorage:", error);
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setIsAuth(false);
+        setUser(null);
+      }
     }
+    setIsLoading(false);
   }, []);
 
   const login = async (loginValue, passwordValue) => {
@@ -70,7 +80,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuth, user, login, logout, register }}>
+    <AuthContext.Provider
+      value={{ isAuth, user, login, logout, register, isLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );

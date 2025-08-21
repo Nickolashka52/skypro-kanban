@@ -1,5 +1,6 @@
+import React from "react";
 import Column from "../column/Column";
-import useTask from "../../hooks/useTask"; 
+import { useTasks, useTaskStatus } from "../../hooks/useTask";
 import {
   MainWrapper,
   Container,
@@ -18,8 +19,9 @@ const statuses = [
   "Готово",
 ];
 
-const Main = () => {
-  const { tasks, isLoading, error } = useTask();
+const Main = React.memo(() => {
+  const tasks = useTasks();
+  const { isLoading, error } = useTaskStatus();
 
   if (isLoading) {
     return (
@@ -74,6 +76,6 @@ const Main = () => {
       </Container>
     </MainWrapper>
   );
-};
+});
 
 export default Main;

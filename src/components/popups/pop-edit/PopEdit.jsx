@@ -8,7 +8,6 @@ const PopEdit = ({ id, onClose, onCloseEntirePopup }) => {
   const [modifiedTask, setModifiedTask] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const originalTaskRef = useRef(null);
 
   const initializeTask = useCallback(() => {
@@ -32,7 +31,6 @@ const PopEdit = ({ id, onClose, onCloseEntirePopup }) => {
   const handleStatusChange = (newStatus) => {
     const updatedTask = { ...modifiedTask, status: newStatus };
     setModifiedTask(updatedTask);
-
     updateTask(
       id,
       { status: newStatus },
@@ -49,17 +47,14 @@ const PopEdit = ({ id, onClose, onCloseEntirePopup }) => {
 
   const handleSave = async (e) => {
     e.preventDefault();
-
     if (!modifiedTask?.title?.trim()) {
       setError("Название задачи не может быть пустым");
       return;
     }
-
     if (!modifiedTask?.description?.trim()) {
       setError("Описание задачи не может быть пустым");
       return;
     }
-
     setIsLoading(true);
     setError(null);
     try {
@@ -81,9 +76,7 @@ const PopEdit = ({ id, onClose, onCloseEntirePopup }) => {
 
   const handleCancel = async () => {
     if (!originalTaskRef.current) return;
-
     setModifiedTask(JSON.parse(JSON.stringify(originalTaskRef.current)));
-
     await updateTask(
       id,
       { status: originalTaskRef.current.status },
@@ -92,7 +85,6 @@ const PopEdit = ({ id, onClose, onCloseEntirePopup }) => {
         temporary: false,
       }
     );
-
     onClose();
   };
 
@@ -107,7 +99,6 @@ const PopEdit = ({ id, onClose, onCloseEntirePopup }) => {
   };
 
   if (isLoading) return <div>Загрузка...</div>;
-
   if (!modifiedTask) return null;
 
   return (
@@ -124,7 +115,6 @@ const PopEdit = ({ id, onClose, onCloseEntirePopup }) => {
                   placeholder="Введите название задачи"
                 />
               </S.PopBrowseTitle>
-
               <S.CategoriesTheme
                 $active
                 $color={
@@ -145,7 +135,6 @@ const PopEdit = ({ id, onClose, onCloseEntirePopup }) => {
                 {modifiedTask.topic}
               </S.CategoriesTheme>
             </S.PopBrowseTopBlock>
-
             <S.StatusBlock>
               <S.Subtitle>Статус</S.Subtitle>
               <div style={{ width: "100%", overflow: "hidden" }}>
@@ -168,7 +157,6 @@ const PopEdit = ({ id, onClose, onCloseEntirePopup }) => {
                 </S.StatusList>
               </div>
             </S.StatusBlock>
-
             <S.PopBrowseWrap>
               <S.PopBrowseForm>
                 <S.FormGroup>
@@ -182,13 +170,11 @@ const PopEdit = ({ id, onClose, onCloseEntirePopup }) => {
                   />
                 </S.FormGroup>
               </S.PopBrowseForm>
-
               <Calendar
                 selectedDate={modifiedTask.date}
                 onDateChange={(date) => handleChange("date", date)}
               />
             </S.PopBrowseWrap>
-
             {error && (
               <div
                 style={{
@@ -202,7 +188,6 @@ const PopEdit = ({ id, onClose, onCloseEntirePopup }) => {
                 {error}
               </div>
             )}
-
             <S.PopBrowseBtnBrowse>
               <S.BtnGroup>
                 <S.BtnSave onClick={handleSave}>Сохранить</S.BtnSave>

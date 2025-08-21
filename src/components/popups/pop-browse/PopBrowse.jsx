@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 import useTask from "../../../hooks/useTask";
 import Calendar from "../../calendar/Calendar";
 import PopEdit from "../pop-edit/PopEdit";
@@ -10,6 +11,13 @@ const PopBrowse = ({ id, onClose }) => {
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const { tasks, deleteTask } = useTask();
+
+  useEffect(() => {
+    document.body.classList.add('modal-open');
+    return () => {
+      document.body.classList.remove('modal-open');
+    };
+  }, []);
 
   useEffect(() => {
     const foundTask = tasks.find((t) => t._id === id);
@@ -28,7 +36,7 @@ const PopBrowse = ({ id, onClose }) => {
       onClose();
     } catch (err) {
       setError("Ошибка удаления задачи");
-      console.error("Ошибка удаления задачи:", err); // Используем переменную err
+      console.error("Ошибка удаления задачи:", err);
     }
   };
 
@@ -40,11 +48,11 @@ const PopBrowse = ({ id, onClose }) => {
     setIsEditing(false);
   };
 
-  if (isLoading) return <div>Загрузка...</div>;
-  if (error) return <div style={{ color: "red" }}>{error}</div>;
-  if (!task) return <div>Задача не найдена</div>;
+  if (isLoading) return ReactDOM.createPortal(<div>Загрузка...</div>, document.getElementById("modal-root"));
+  if (error) return ReactDOM.createPortal(<div style={{ color: "red" }}>{error}</div>, document.getElementById("modal-root"));
+  if (!task) return ReactDOM.createPortal(<div>Задача не найдена</div>, document.getElementById("modal-root"));
 
-  return (
+  const modalContent = (
     <>
       {isEditing ? (
         <PopEdit
@@ -59,7 +67,6 @@ const PopBrowse = ({ id, onClose }) => {
               <S.PopBrowseContent>
                 <S.PopBrowseTopBlock>
                   <S.PopBrowseTitle>{task.title}</S.PopBrowseTitle>
-
                   <S.CategoriesTheme
                     $active
                     $color={
@@ -80,12 +87,10 @@ const PopBrowse = ({ id, onClose }) => {
                     {task.topic}
                   </S.CategoriesTheme>
                 </S.PopBrowseTopBlock>
-
                 <S.StatusBlock>
                   <S.Subtitle>Статус</S.Subtitle>
                   <S.StatusItem $active>{task.status}</S.StatusItem>
                 </S.StatusBlock>
-
                 <S.PopBrowseWrap>
                   <S.PopBrowseForm>
                     <S.FormGroup>
@@ -93,10 +98,8 @@ const PopBrowse = ({ id, onClose }) => {
                       <S.Textarea readOnly value={task.description || ""} />
                     </S.FormGroup>
                   </S.PopBrowseForm>
-
                   <Calendar selectedDate={task.date} readOnly />
                 </S.PopBrowseWrap>
-
                 <S.PopBrowseBtnBrowse>
                   <S.BtnGroup>
                     <S.BtnEdit onClick={handleEdit}>
@@ -115,6 +118,8 @@ const PopBrowse = ({ id, onClose }) => {
       )}
     </>
   );
+
+  return ReactDOM.createPortal(modalContent, document.getElementById("modal-root"));
 };
 
 export default PopBrowse;

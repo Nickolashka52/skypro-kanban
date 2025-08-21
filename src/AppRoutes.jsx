@@ -10,7 +10,12 @@ import NotFoundPage from "./pages/NotFoundPage";
 import useAuth from "./hooks/useAuth";
 
 const PrivateRoute = ({ children }) => {
-  const { isAuth } = useAuth();
+  const { isAuth, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <div>Загрузка...</div>;
+  }
+
   return isAuth ? children : <Navigate to="/login" replace />;
 };
 

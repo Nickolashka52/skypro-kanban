@@ -8,23 +8,19 @@ export const GlobalStyles = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
   }
-
   a,
   a:visited {
     text-decoration: none;
   }
-
   button,
   ._btn { 
     cursor: pointer;
     outline: none;
   }
-
   ul,
   ol {
     list-style: none;
   }
-
   @keyframes card-animation {
     0% {
       height: 0;
@@ -35,7 +31,6 @@ export const GlobalStyles = createGlobalStyle`
       opacity: 1;
     }
   }
-
   html,
   body {
     width: 100%;
@@ -44,8 +39,6 @@ export const GlobalStyles = createGlobalStyle`
     color: #000000;
     background-color: #e5e5e5; 
   }
-
- 
   body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -54,7 +47,9 @@ export const GlobalStyles = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-
+  body.modal-open {
+    overflow: hidden;
+  }
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
       monospace;

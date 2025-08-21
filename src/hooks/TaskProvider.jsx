@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import {
   getTasks as apiGetTasks,
   createTask as apiCreateTask,
@@ -34,107 +34,119 @@ export const TaskProvider = ({ children }) => {
     fetchTasks();
   }, [fetchTasks]);
 
-  const createTask = async (taskData) => {
-    if (!isAuth) {
-      setError("Требуется авторизация");
-      return false;
-    }
+  const createTask = useCallback(
+    async (taskData) => {
+      if (!isAuth) {
+        setError("Требуется авторизация");
+        return false;
+      }
 
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await apiCreateTask(taskData);
-      const newTask = response.data?.task || response.task;
+      setIsLoading(true);
+      setError(null);
+      try {
+        const response = await apiCreateTask(taskData);
+        const newTask = response.data?.task || response.task;
+        setTasks((prev) => [...prev, newTask]);
+        return true;
+      } catch (err) {
+        setError(err.response?.data?.message || "Ошибка создания задачи");
+        return false;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [isAuth]
+  );
 
-      setTasks((prev) => [...prev, newTask]);
+  const updateTask = useCallback(
+    async (
+      id,
+      taskData,
+      {
+        temporary = false,
+        optimisticUpdate = true,
+        rollbackOnError = true,
+      } = {}
+    ) => {
+      if (!isAuth) {
+        setError("Требуется авторизация");
+        return false;
+      }
 
-      return true;
-    } catch (err) {
-      setError(err.response?.data?.message || "Ошибка создания задачи");
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const updateTask = async (
-    id,
-    taskData,
-    { temporary = false, optimisticUpdate = true, rollbackOnError = true } = {}
-  ) => {
-    if (!isAuth) {
-      setError("Требуется авторизация");
-      return false;
-    }
-
-    let previousTask = null;
-    if (optimisticUpdate) {
-      previousTask = tasks.find((t) => t._id === id);
-      setTasks((prev) =>
-        prev.map((task) => (task._id === id ? { ...task, ...taskData } : task))
-      );
-    }
-
-    if (temporary) return true;
-
-    setIsLoading(true);
-    try {
-      const response = await apiUpdateTask(id, taskData);
-      const updatedTask = response.data?.task || response.task;
-
-      if (updatedTask) {
+      let previousTask = null;
+      if (optimisticUpdate) {
+        previousTask = tasks.find((t) => t._id === id);
         setTasks((prev) =>
-          prev.map((task) => (task._id === id ? updatedTask : task))
+          prev.map((task) =>
+            task._id === id ? { ...task, ...taskData } : task
+          )
         );
       }
-      return true;
-    } catch (err) {
-      setError(err.response?.data?.message || "Ошибка обновления задачи");
 
-      if (optimisticUpdate && rollbackOnError && previousTask) {
-        setTasks((prev) =>
-          prev.map((task) => (task._id === id ? previousTask : task))
-        );
+      if (temporary) return true;
+
+      setIsLoading(true);
+      try {
+        const response = await apiUpdateTask(id, taskData);
+        const updatedTask = response.data?.task || response.task;
+        if (updatedTask) {
+          setTasks((prev) =>
+            prev.map((task) => (task._id === id ? updatedTask : task))
+          );
+        }
+        return true;
+      } catch (err) {
+        setError(err.response?.data?.message || "Ошибка обновления задачи");
+        if (optimisticUpdate && rollbackOnError && previousTask) {
+          setTasks((prev) =>
+            prev.map((task) => (task._id === id ? previousTask : task))
+          );
+        }
+        return false;
+      } finally {
+        setIsLoading(false);
       }
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+    [isAuth, tasks]
+  );
 
-  const deleteTask = async (id) => {
-    if (!isAuth) {
-      setError("Требуется авторизация");
-      return false;
-    }
+  const deleteTask = useCallback(
+    async (id) => {
+      if (!isAuth) {
+        setError("Требуется авторизация");
+        return false;
+      }
 
-    setIsLoading(true);
-    setError(null);
-    try {
-      await apiDeleteTask(id);
-      setTasks((prev) => prev.filter((task) => task._id !== id));
-      return true;
-    } catch (err) {
-      setError(err.response?.data?.message || "Ошибка удаления задачи");
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      setIsLoading(true);
+      setError(null);
+      try {
+        await apiDeleteTask(id);
+        setTasks((prev) => prev.filter((task) => task._id !== id));
+        return true;
+      } catch (err) {
+        setError(err.response?.data?.message || "Ошибка удаления задачи");
+        return false;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [isAuth]
+  );
+
+  const contextValue = useMemo(
+    () => ({
+      tasks,
+      isLoading,
+      error,
+      fetchTasks,
+      createTask,
+      updateTask,
+      deleteTask,
+    }),
+    [tasks, isLoading, error, fetchTasks, createTask, updateTask, deleteTask]
+  );
 
   return (
-    <TaskContext.Provider
-      value={{
-        tasks,
-        isLoading,
-        error,
-        fetchTasks,
-        createTask,
-        updateTask,
-        deleteTask,
-      }}
-    >
-      {children}
-    </TaskContext.Provider>
+    <TaskContext.Provider value={contextValue}>{children}</TaskContext.Provider>
   );
 };

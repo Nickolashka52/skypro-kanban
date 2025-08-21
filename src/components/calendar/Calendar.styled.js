@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const CalendarWrapper = styled.div`
   width: 182px;
   margin-bottom: 20px;
-
   @media screen and (max-width: 660px) {
     max-width: 340px;
     width: 100%;
@@ -37,7 +36,6 @@ export const CalendarNav = styled.div`
   justify-content: space-between;
   margin-top: 14px;
   padding: 0 7px;
-
   @media screen and (max-width: 660px) {
     padding: 0;
   }
@@ -61,12 +59,10 @@ export const NavAction = styled.button.attrs(() => ({
   background: transparent;
   border: none;
   padding: 0;
-
   svg {
     fill: #94a6be;
     display: block;
   }
-
   &:focus {
     outline: none;
   }
@@ -83,7 +79,6 @@ export const DaysNames = styled.div`
   justify-content: space-between;
   margin: 7px 0;
   padding: 0 7px;
-
   @media screen and (max-width: 660px) {
     padding: 0;
   }
@@ -96,11 +91,8 @@ export const DayName = styled.div`
   line-height: normal;
   letter-spacing: -0.2px;
   user-select: none;
-
   &.weekend {
-    /* если нужно можно добавить стили для выходных */
   }
-
   @media screen and (max-width: 660px) {
     font-size: 14px;
   }
@@ -111,7 +103,6 @@ export const Cells = styled.div`
   height: 126px;
   display: flex;
   flex-wrap: wrap;
-
   @media screen and (max-width: 660px) {
     width: 344px;
     height: auto;
@@ -134,6 +125,13 @@ export const Cell = styled.div`
   letter-spacing: -0.2px;
   cursor: pointer;
   user-select: none;
+
+  &.empty-cell {
+    background-color: transparent;
+    cursor: default;
+    pointer-events: none;
+    visibility: hidden;
+  }
 
   &.other-month {
     opacity: 0;
@@ -173,11 +171,9 @@ export const CalendarParagraph = styled.p`
   font-size: 10px;
   line-height: 1;
   user-select: none;
-
   span {
     color: #000000;
   }
-
   @media screen and (max-width: 660px) {
     font-size: 14px;
   }
