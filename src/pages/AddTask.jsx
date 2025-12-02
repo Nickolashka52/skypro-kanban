@@ -1,4 +1,3 @@
-// pages/AddTask.jsx
 import { useNavigate } from "react-router-dom";
 import Header from "../components/header/Header";
 import PopNewCard from "../components/popups/pop-new-card/PopNewCard";
@@ -9,7 +8,7 @@ const AddTask = () => {
   const navigate = useNavigate();
 
   const handleClose = () => {
-    navigate(-1); // Возвращаемся назад по истории браузера
+    navigate("/"); 
   };
 
   return (

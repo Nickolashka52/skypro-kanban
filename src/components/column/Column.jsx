@@ -1,7 +1,8 @@
+import React from "react";
 import Card from "../card/Card";
 import { MainColumn, ColumnTitle, Cards } from "./Column.styled";
 
-const Column = ({ title, cardsList }) => {
+const Column = React.memo(({ title, cardsList }) => {
   return (
     <MainColumn>
       <ColumnTitle>
@@ -14,6 +15,6 @@ const Column = ({ title, cardsList }) => {
       </Cards>
     </MainColumn>
   );
-};
+});
 
 export default Column;

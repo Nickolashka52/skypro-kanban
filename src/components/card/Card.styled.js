@@ -21,9 +21,6 @@ export const cardThemes = {
 
 export const CardsItem = styled.div`
   padding: 5px;
-  animation-name: card-animation;
-  animation-duration: 500ms;
-  animation-timing-function: linear;
 `;
 
 export const CardsCard = styled.div`

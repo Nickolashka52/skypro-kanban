@@ -1,11 +1,14 @@
+import React from "react";
 import Column from "../column/Column";
-import useTask from "../../hooks/useTask"; // Импортируем хук
+import { useTasks, useTaskStatus } from "../../hooks/useTask";
 import {
   MainWrapper,
   Container,
   MainBlock,
   MainContent,
   ColumnWrapper,
+  LoadingContainer,
+  Loader,
 } from "./Main.styled";
 
 const statuses = [
@@ -16,21 +19,16 @@ const statuses = [
   "Готово",
 ];
 
-const Main = () => {
-  // Получаем состояние и функции из TaskContext
-  const { tasks, isLoading, error } = useTask();
+const Main = React.memo(() => {
+  const tasks = useTasks();
+  const { isLoading, error } = useTaskStatus();
 
   if (isLoading) {
     return (
-      <MainWrapper
-        style={{
-          minHeight: "300px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <p style={{ fontSize: "1.5rem", color: "#555" }}>Данные загружаются</p>
+      <MainWrapper>
+        <LoadingContainer>
+          <Loader>Загрузка...</Loader>
+        </LoadingContainer>
       </MainWrapper>
     );
   }
@@ -46,6 +44,14 @@ const Main = () => {
         }}
       >
         <p style={{ fontSize: "1.5rem", color: "red" }}>{error}</p>
+      </MainWrapper>
+    );
+  }
+
+  if (!isLoading && tasks.length === 0) {
+    return (
+      <MainWrapper>
+        <p>Новых задач нет</p>
       </MainWrapper>
     );
   }
@@ -70,6 +76,6 @@ const Main = () => {
       </Container>
     </MainWrapper>
   );
-};
+});
 
 export default Main;

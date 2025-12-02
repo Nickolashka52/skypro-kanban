@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import useTask from "../../../hooks/useTask";
+import { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
+import { useTaskActions } from "../../../hooks/useTask";
 import Calendar from "../../calendar/Calendar";
 import {
   PopNewCardStyled,
@@ -19,7 +19,6 @@ import {
   Categories,
   CategoriesThemes,
   CategoriesTheme,
-  ErrorMessage,
 } from "./PopNewCard.styled";
 
 const PopNewCard = ({ onClose }) => {
@@ -29,9 +28,14 @@ const PopNewCard = ({ onClose }) => {
   const [date, setDate] = useState(new Date().toISOString());
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const { createTask } = useTaskActions();
 
-  const { createTask } = useTask();
+  useEffect(() => {
+    document.body.classList.add("modal-open");
+    return () => {
+      document.body.classList.remove("modal-open");
+    };
+  }, []);
 
   const handleCloseClick = (e) => {
     e.preventDefault();
@@ -40,6 +44,10 @@ const PopNewCard = ({ onClose }) => {
 
   const handleCreate = async (e) => {
     e.preventDefault();
+    if (!title.trim() || !description.trim()) {
+      setError("Название и описание задачи не могут быть пустыми");
+      return;
+    }
     setIsLoading(true);
     setError(null);
     try {
@@ -52,7 +60,7 @@ const PopNewCard = ({ onClose }) => {
       };
       const success = await createTask(taskData);
       if (success) {
-        navigate("/");
+        if (onClose) onClose();
       }
     } catch (err) {
       setError("Ошибка создания задачи.");
@@ -62,7 +70,7 @@ const PopNewCard = ({ onClose }) => {
     }
   };
 
-  return (
+  const modalContent = (
     <PopNewCardStyled id="popNewCard">
       <PopNewCardContainer>
         <PopNewCardBlock>
@@ -71,7 +79,6 @@ const PopNewCard = ({ onClose }) => {
             <PopNewCardClose href="#" onClick={handleCloseClick}>
               &#10006;
             </PopNewCardClose>
-
             <PopNewCardWrap>
               <PopNewCardForm id="formNewCard" onSubmit={handleCreate}>
                 <FormNewBlock>
@@ -88,7 +95,6 @@ const PopNewCard = ({ onClose }) => {
                     autoFocus
                   />
                 </FormNewBlock>
-
                 <FormNewBlock>
                   <label htmlFor="textArea">
                     <Subtitle>Описание задачи</Subtitle>
@@ -102,10 +108,8 @@ const PopNewCard = ({ onClose }) => {
                   />
                 </FormNewBlock>
               </PopNewCardForm>
-
-              <Calendar onDateChange={setDate} />
+              <Calendar selectedDate={date} onDateChange={setDate} />
             </PopNewCardWrap>
-
             <Categories>
               <Subtitle>Категория</Subtitle>
               <CategoriesThemes>
@@ -116,7 +120,6 @@ const PopNewCard = ({ onClose }) => {
                 >
                   <p style={{ color: "#ff6d00" }}>Web Design</p>
                 </CategoriesTheme>
-
                 <CategoriesTheme
                   $active={topic === "Research"}
                   onClick={() => setTopic("Research")}
@@ -124,7 +127,6 @@ const PopNewCard = ({ onClose }) => {
                 >
                   <p style={{ color: "#06b16e" }}>Research</p>
                 </CategoriesTheme>
-
                 <CategoriesTheme
                   $active={topic === "Copywriting"}
                   onClick={() => setTopic("Copywriting")}
@@ -134,9 +136,19 @@ const PopNewCard = ({ onClose }) => {
                 </CategoriesTheme>
               </CategoriesThemes>
             </Categories>
-
-            {error && <ErrorMessage>{error}</ErrorMessage>}
-
+            {error && (
+              <div
+                style={{
+                  color: "red",
+                  padding: "10px",
+                  margin: "10px 0",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                }}
+              >
+                {error}
+              </div>
+            )}
             <FormNewCreate onClick={handleCreate} disabled={isLoading}>
               {isLoading ? "Создание..." : "Создать задачу"}
             </FormNewCreate>
@@ -144,6 +156,11 @@ const PopNewCard = ({ onClose }) => {
         </PopNewCardBlock>
       </PopNewCardContainer>
     </PopNewCardStyled>
+  );
+
+  return ReactDOM.createPortal(
+    modalContent,
+    document.getElementById("modal-root")
   );
 };
 

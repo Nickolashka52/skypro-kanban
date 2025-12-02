@@ -18,19 +18,19 @@ const Login = () => {
   const [loginValue, setLoginValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false); // Добавлено для состояния загрузки
+  const [isLoading, setIsLoading] = useState(false); 
 
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true); // Показываем состояние загрузки
+    setIsLoading(true); 
     setError(null);
-    const success = await login(loginValue, passwordValue); // Асинхронный вызов
-    setIsLoading(false); // Скрываем состояние загрузки
+    const success = await login(loginValue, passwordValue); 
+    setIsLoading(false); 
     if (success) {
-      navigate("/"); // Редирект на главную после успешного входа
+      navigate("/"); 
     } else {
       setError("Неверный логин или пароль");
     }

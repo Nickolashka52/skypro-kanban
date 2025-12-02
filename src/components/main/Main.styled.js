@@ -1,4 +1,26 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const spin = keyframes`
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+`;
+
+export const Loader = styled.div`
+  font-size: 1.5rem;
+  color: #555;
+  animation: ${spin} 1s linear infinite;
+`;
+
+export const LoadingContainer = styled.div`
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 export const MainWrapper = styled.main`
   width: 100%;

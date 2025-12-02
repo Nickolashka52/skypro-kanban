@@ -1,9 +1,7 @@
 import axios from "axios";
 
-// Базовый URL API
 const BASE_URL = "https://wedev-api.sky.pro/api";
 
-// Создаём экземпляр axios с базовыми настройками
 const api = axios.create({
   baseURL: BASE_URL,
   headers: {
@@ -11,7 +9,6 @@ const api = axios.create({
   },
 });
 
-// Интерцептор для добавления токена в заголовки запросов
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -25,12 +22,10 @@ api.interceptors.request.use(
   }
 );
 
-// Интерцептор для обработки ошибок (например, 401 - unauthorized)
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      // Если токен недействителен, удаляем его и перенаправляем на логин
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       window.location.href = "/login";
@@ -39,7 +34,22 @@ api.interceptors.response.use(
   }
 );
 
-// Методы для работы с пользователями
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response) {
+      if (error.response.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "/login";
+      } else if (error.response.status >= 500) {
+        console.error("Server error:", error.response.data);
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 export const registerUser = async (userData) => {
   return await api.post("/user", userData);
 };
@@ -48,7 +58,6 @@ export const loginUser = async (credentials) => {
   return await api.post("/user/login", credentials);
 };
 
-// Методы для работы с задачами
 export const getTasks = async () => {
   return await api.get("/kanban");
 };
